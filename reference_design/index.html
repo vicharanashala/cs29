@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>FAQ — Vicharanashala Internship | IIT Ropar</title>
+  <meta name="description" content="Frequently asked questions about the Vicharanashala Internship (VINS) — Applied AI and Open-source software engineering at IIT Ropar."/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❓</text></svg>">
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo" id="logo">
+      <span class="logo-mark">V</span>
+      <span class="logo-text">Vicharanashala</span>
+    </a>
+    <nav class="site-nav" id="site-nav">
+      <a href="https://samagama.in/internship" target="_blank" rel="noopener">Overview</a>
+      <a href="#" class="active">FAQ</a>
+      <a href="#" id="nav-voice-btn" onclick="openVoiceAgent(event)" class="voice-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:4px"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>Voice
+      </a>
+      <a href="https://samagama.in" target="_blank" rel="noopener">samagama.in</a>
+    </nav>
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero" id="hero">
+  <div class="hero-inner">
+    <p class="hero-badge">IIT Ropar · Applied AI · Open-Source</p>
+    <h1 class="hero-title">Frequently Asked<br/>Questions</h1>
+    <p class="hero-subtitle">Everything you need to know about the Vicharanashala Internship Programme (VINS). Search or browse by category below.</p>
+    <div class="search-container" id="search-container">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="faq-search" placeholder="Search FAQ — try NOC, stipend, ViBe, certificate…" aria-label="Search FAQ" autocomplete="off"/>
+      <kbd class="search-shortcut" id="search-shortcut">/</kbd>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MAIN LAYOUT ─── -->
+<div class="main-layout" id="main-layout">
+
+  <!-- SIDEBAR TOC (LEFT) -->
+  <aside class="toc-sidebar" id="toc-sidebar">
+    <div class="toc-sticky">
+      <h2 class="toc-heading">Contents</h2>
+      <nav class="toc-nav" id="toc-nav">
+        <a href="#s-1" class="toc-link" data-section="s-1"><span class="toc-num">01</span>About the Internship</a>
+        <a href="#s-2" class="toc-link" data-section="s-2"><span class="toc-num">02</span>Timing &amp; Dates</a>
+        <a href="#s-3" class="toc-link" data-section="s-3"><span class="toc-num">03</span>NOC</a>
+        <a href="#s-4" class="toc-link" data-section="s-4"><span class="toc-num">04</span>Selection &amp; Offer Letter</a>
+        <a href="#s-5" class="toc-link" data-section="s-5"><span class="toc-num">05</span>Work &amp; Mentorship</a>
+        <a href="#s-6" class="toc-link" data-section="s-6"><span class="toc-num">06</span>Communication</a>
+        <a href="#s-7" class="toc-link" data-section="s-7"><span class="toc-num">07</span>Interviews</a>
+        <a href="#s-8" class="toc-link" data-section="s-8"><span class="toc-num">08</span>Certificate</a>
+        <a href="#s-9" class="toc-link" data-section="s-9"><span class="toc-num">09</span>Rosetta Journal</a>
+        <a href="#s-10" class="toc-link" data-section="s-10"><span class="toc-num">10</span>Phase 1 &amp; ViBe LMS</a>
+        <a href="#s-11" class="toc-link" data-section="s-11"><span class="toc-num">11</span>Yaksha Chat</a>
+        <a href="#s-12" class="toc-link" data-section="s-12"><span class="toc-num">12</span>ViBe Platform</a>
+        <a href="#s-13" class="toc-link" data-section="s-13"><span class="toc-num">13</span>Team Formation</a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="faq-main" id="faq-main">
+
+    <!-- Category Filters -->
+    <div class="category-filters" id="category-filters">
+      <button class="category-pill active" data-category="all" id="pill-all">All Questions</button>
+      <button class="category-pill" data-category="s-1" id="pill-s1">Eligibility</button>
+      <button class="category-pill" data-category="s-2" id="pill-s2">Dates</button>
+      <button class="category-pill" data-category="s-3" id="pill-s3">NOC</button>
+      <button class="category-pill" data-category="s-4" id="pill-s4">Offer Letter</button>
+      <button class="category-pill" data-category="s-5" id="pill-s5">Stipend</button>
+      <button class="category-pill" data-category="s-7" id="pill-s7">Acceptance</button>
+      <button class="category-pill" data-category="s-8" id="pill-s8">Leave & Exams</button>
+      <button class="category-pill" data-category="s-9" id="pill-s9">Laptop & Setup</button>
+      <button class="category-pill" data-category="s-10" id="pill-s10">Proctoring</button>
+      <button class="category-pill" data-category="s-12" id="pill-s12">Daily Standup</button>
+      <button class="category-pill" data-category="s-6" id="pill-s6">Email & WhatsApp</button>
+      <button class="category-pill" data-category="s-11" id="pill-s11">Mentor</button>
+      <button class="category-pill" data-category="s-13" id="pill-s13">Project</button>
+    </div>
+
+    <!-- FAQ Controls (right-aligned) -->
+    <div class="faq-controls" id="faq-controls">
+      <p class="faq-count" id="faq-count" aria-live="polite"></p>
+      <div class="faq-controls-right">
+        <button type="button" id="faq-expand-all" class="control-btn" aria-label="Expand all questions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+          Expand all
+        </button>
+        <button type="button" id="faq-collapse-all" class="control-btn" aria-label="Collapse all questions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 11l-5-5-5 5M17 18l-5-5-5 5"/></svg>
+          Collapse all
+        </button>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div class="no-results" id="no-results" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg>
+      <h3>No questions found</h3>
+      <p>Try a different keyword or browse by category above.</p>
+    </div>
+
+    <!-- ═══════ SECTION 1: About the Internship ═══════ -->
+    <section class="faq-section" id="s-1" data-category="s-1">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2 class="section-title">About the Internship</h2>
+        <span class="section-count"></span>
+      </div>
+
+      <div class="faq-item" id="q-1-1" data-category="s-1">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-1-1" id="btn-1-1">
+          <span class="q-number">1.1</span>
+          <span class="q-text">What is the Vicharanashala internship?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-1-1" role="region" aria-labelledby="btn-1-1">
+          <div class="answer-content">
+            <p>A two-month internship run by Vicharanashala, a research lab at IIT Ropar. You will work on a real open-source project under a mentor, after a short training phase tailored to where you already are. The internship is free — we do not charge, and the work is real.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-1-2" data-category="s-1">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-1-2" id="btn-1-2">
+          <span class="q-number">1.2</span>
+          <span class="q-text">What is VINS?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-1-2" role="region" aria-labelledby="btn-1-2">
+          <div class="answer-content">
+            <p><strong>VINS</strong> is the Vicharanashala Internship — an online programme open to anyone who clears our interview. The work is real open-source contribution under a mentor, the certificate is from the Vicharanashala Lab for Education Design at IIT Ropar, and the programme itself is free (we charge nothing). There is no stipend.</p>
+            <p>If you are seeing a yellow VINS panel on your result page, you are selected.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-1-3" data-category="s-1">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-1-3" id="btn-1-3">
+          <span class="q-number">1.3</span>
+          <span class="q-text">What are the phases of VINS, and what do the badges mean?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-1-3" role="region" aria-labelledby="btn-1-3">
+          <div class="answer-content">
+            <p>VINS is structured as four phases. Each one is marked by a badge — a small token of where you are in the journey.</p>
+            <ul>
+              <li>🥉 <strong>Bronze (Phase 1)</strong> — a short training period at the start, planned around what you already know. If you arrive already comfortable with the basics, your mentor may skip Bronze and put you straight on to the project.</li>
+              <li>🥈 <strong>Silver (Phase 2)</strong> — the main work. You contribute to a real open-source project under a Vicharanashala mentor. Finishing Bronze and Silver completes your internship and earns the certificate.</li>
+              <li>🥇 <strong>Gold (Phase 3)</strong> — a recognition awarded during Silver if your contribution stands on its own as a meaningful feature, not just a small fix.</li>
+              <li>🏆 <strong>Platinum (Phase 4)</strong> — a standing invitation to come back and visit the lab — a short trip — any time during the year after your internship ends. We help with travel through a small visit stipend.</li>
+            </ul>
+            <p>Most interns finish at Bronze + Silver, and that is exactly what the certificate is for. Gold and Platinum are extras you can pick up if your work makes the case for them. Either way, you walk away with a real open-source contribution to your name and a mentor who knows you well.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-1-4" data-category="s-1">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-1-4" id="btn-1-4">
+          <span class="q-number">1.4</span>
+          <span class="q-text">Who is the internship for? Are alumni eligible?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-1-4" role="region" aria-labelledby="btn-1-4">
+          <div class="answer-content">
+            <p>The internship is for <strong>currently-enrolled students</strong> at any college or university — undergraduate, postgraduate, or doctoral. The NOC requirement is the practical reflection of this: we ask for institutional consent that you can commit your time to this internship.</p>
+            <p><strong>Candidates who have already graduated and are not currently enrolled in any programme are not eligible</strong> for this cycle. If you re-enrol later (higher studies, etc.), you are very welcome to apply again in a future cycle.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-1-5" data-category="s-1">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-1-5" id="btn-1-5">
+          <span class="q-number">1.5</span>
+          <span class="q-text">Is this the same as IIT Ropar's official Summer Research Internship?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-1-5" role="region" aria-labelledby="btn-1-5">
+          <div class="answer-content">
+            <p>No. Summership 2026 is a VLED Lab initiative. The certificate is issued by the <strong>Vicharanashala Lab for Education Design</strong>, not centrally by the institute. IIT Ropar runs a separate institutional summer research internship through its own office. Do not represent Summership 2026 as equivalent to that programme.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-1-6" data-category="s-1">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-1-6" id="btn-1-6">
+          <span class="q-number">1.6</span>
+          <span class="q-text">I have to attend my class tomorrow/today/some day — can I take leave?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-1-6" role="region" aria-labelledby="btn-1-6">
+          <div class="answer-content">
+            <p>Leave is not permitted. If you are also attending classes or exams, you will be relieved from the internship immediately and will need to join the next batch when it starts.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ SECTION 2: Timing and Dates ═══════ -->
+    <section class="faq-section" id="s-2" data-category="s-2">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2 class="section-title">Timing &amp; Dates</h2>
+        <span class="section-count"></span>
+      </div>
+
+      <div class="faq-item" id="q-2-1" data-category="s-2">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-2-1" id="btn-2-1">
+          <span class="q-number">2.1</span>
+          <span class="q-text">When can I start?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-2-1" role="region" aria-labelledby="btn-2-1">
+          <div class="answer-content">
+            <p>You can start any time in 2026 — VINS is flexible on the start date — <strong>but there are two things you must hold in mind together</strong>, and one strong recommendation.</p>
+            <p><strong>The hard rule.</strong> Your internship must <strong>finish by 31 December 2026.</strong> That date is non-negotiable.</p>
+            <p><strong>The strong recommendation: start as soon as possible.</strong> The earlier you join, the more of the May–July main cohort you catch — and three things make starting earlier materially better:</p>
+            <ul>
+              <li><strong>Cohort networking.</strong> The batch goes through Bronze together — peer discussions, parallel problem-solving, and lasting connections happen during this window.</li>
+              <li><strong>TA support is concentrated in May–July.</strong> TAs are full-time during this window.</li>
+              <li><strong>Training rolls out with the cohort</strong>, not piecemeal — you get the material with the discussion around it.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-2-2" data-category="s-2">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-2-2" id="btn-2-2">
+          <span class="q-number">2.2</span>
+          <span class="q-text">How long is the internship?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-2-2" role="region" aria-labelledby="btn-2-2">
+          <div class="answer-content">
+            <p><strong>Two months from your chosen start date</strong>, with an optional <strong>one-month grace period</strong> if you need it. End must land on or before 31 December 2026.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-2-3" data-category="s-2">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-2-3" id="btn-2-3">
+          <span class="q-number">2.3</span>
+          <span class="q-text">Can I start in July, August or later if I have exams now?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-2-3" role="region" aria-labelledby="btn-2-3">
+          <div class="answer-content">
+            <p>Yes — but only if your exams genuinely make an earlier start impossible. Wait until your exams are done, then opt in and start. Do not attempt to juggle this internship with ongoing exams. Make sure your chosen start date plus 2 months (or 3 with grace) lands on or before 31 December 2026.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-2-4" data-category="s-2">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-2-4" id="btn-2-4">
+          <span class="q-number">2.4</span>
+          <span class="q-text">Can I start with the cohort and take a relaxation during my exam window?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-2-4" role="region" aria-labelledby="btn-2-4">
+          <div class="answer-content">
+            <p>No. This is not an arrangement we offer.</p>
+            <p>VINS is a full-attention internship — six to ten hours a day, sometimes more. Splitting that with college exams damages both sides: the project loses momentum, the exams suffer, and the mentor invests in someone who can only half-engage.</p>
+            <p>If your exams fall inside the cohort duration, defer your start to after your exams end, opt in then, and run the internship at full attention.</p>
+            <p><strong>A note on consequences.</strong> If we later learn that a candidate was sitting college exams during their internship period, <strong>we reserve the right to terminate the internship or withhold the certificate at any time</strong> — including after the internship has otherwise been completed.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-2-5" data-category="s-2">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-2-5" id="btn-2-5">
+          <span class="q-number">2.5</span>
+          <span class="q-text">Can I take leave or get an exemption during the internship for an exam scheduled in June?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-2-5" role="region" aria-labelledby="btn-2-5">
+          <div class="answer-content">
+            <p>The attendance rule is firm — the 55-day continuous window is a non-negotiable part of the internship, and we cannot offer an exemption for an exam during this period. The policy exists because split attention genuinely damages both your exam preparation and your internship work.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" id="q-2-6" data-category="s-2">
+        <button class="faq-question" aria-expanded="false" aria-controls="a-2-6" id="btn-2-6">
+          <span class="q-number">2.6</span>
+          <span class="q-text">Are orientation session recordings shared with interns?</span>
+          <span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </button>
+        <div class="faq-answer" id="a-2-6" role="region" aria-labelledby="btn-2-6">
+          <div class="answer-content">
+            <p>Recordings of the sessions will not be provided. However, we may provide access to an abridged version of a talk or session if we consider it important. We do not guarantee this for every session.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ SECTION 3: NOC ═══════ -->
+    <section class="faq-section" id="s-3" data-category="s-3">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2 class="section-title">NOC (No Objection Certificate)</h2>
+        <span class="section-count"></span>
+      </div>
+
+      <div class="faq-item" id="q-3-1" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-1" id="btn-3-1"><span class="q-number">3.1</span><span class="q-text">What dates do I put on the NOC?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-1" role="region" aria-labelledby="btn-3-1"><div class="answer-content"><p><strong>Default: your chosen start date → your start + 2 months</strong> (with up to 1 month grace), ensuring the end date is on or before 31 December 2026. Pick the earliest start date you can realistically make — the May–July summer window is the main cohort.</p><p>If the NOC will be signed on a specific later date, pick a start date <em>after</em> the signature date.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-2" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-2" id="btn-3-2"><span class="q-number">3.2</span><span class="q-text">Who can sign the NOC?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-2" role="region" aria-labelledby="btn-3-2"><div class="answer-content"><p>Any authorised signatory at your college: HOD, Acting HOD (during holidays), Principal, Dean, Director, or Training &amp; Placement Officer. For dual-degree students, either institution can sign — pick whichever is easier. For IITM BS Online Degree (standalone) students, any officer from the BS office can sign.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-3" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-3" id="btn-3-3"><span class="q-number">3.3</span><span class="q-text">When do I submit the NOC? Is the deadline hard?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-3" role="region" aria-labelledby="btn-3-3"><div class="answer-content"><p>The deadline is <strong>not hard</strong> — there is no specific cut-off date by which the NOC must be uploaded. <strong>But for the internship to actually begin properly, you should submit it as early as possible and join the current summer cohort.</strong></p><p>If you are on VINS you <em>can</em> technically upload your NOC and start later in the year, but <strong>we strongly do not recommend it</strong> — by then your mentor may already be busy with other work, and the cohort + TA support that make this internship genuinely good are concentrated during the summer window.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-4" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-4" id="btn-3-4"><span class="q-number">3.4</span><span class="q-text">What format should I use? Do I need to design it myself?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-4" role="region" aria-labelledby="btn-3-4"><div class="answer-content"><p>No — <strong>we provide a printable NOC format</strong>. Once your result is out and you log in to samagama.in, you will see a <strong>Download blank NOC</strong> button on your dashboard. Take a printout, get it physically signed and stamped by your authorised signatory, scan it, and upload the signed PDF using the <strong>Upload signed NOC</strong> button. You do not need to draft anything yourself.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-5" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-5" id="btn-3-5"><span class="q-number">3.5</span><span class="q-text">What if my college gives me an NOC in their own format?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-5" role="region" aria-labelledby="btn-3-5"><div class="answer-content"><p>A college's own NOC format is acceptable, as long as all four required entries are present:</p><ul><li>The signing authority's <strong>handwritten signature</strong></li><li>The signing authority's <strong>official email address</strong> (we cross-check)</li><li>Your <strong>full name</strong></li><li>Your <strong>signature</strong></li></ul></div></div></div>
+
+      <div class="faq-item" id="q-3-6" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-6" id="btn-3-6"><span class="q-number">3.6</span><span class="q-text">Does it need to be signed by hand?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-6" role="region" aria-labelledby="btn-3-6"><div class="answer-content"><p>Yes. Three things are required:</p><ul><li>The authorised signatory's <strong>handwritten signature</strong></li><li>The <strong>institutional rubber stamp / seal</strong></li><li>The signatory's <strong>email address</strong> — we automatically cross-check with that person</li></ul><p>Digital signatures are not accepted on the PDF path. If a physically-signed printout is impractical, use the email-forward path (§3.7).</p></div></div></div>
+
+      <div class="faq-item" id="q-3-7" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-7" id="btn-3-7"><span class="q-number">3.7</span><span class="q-text">Can my HOD email the NOC instead of signing a printout?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-7" role="region" aria-labelledby="btn-3-7"><div class="answer-content"><p><strong>Yes — there is a fully-equivalent email-forward path.</strong></p><ol><li>Download the <strong>text NOC</strong> from your dashboard.</li><li>Fill in the student-side fields, then email it to your HOD.</li><li>Your HOD forwards the email to <code>sudarshan@iitrpr.ac.in</code> from their official institutional email with the subject: <code>NOC for my student &lt;Your Full Name&gt;</code></li></ol><p>Two non-negotiable conditions: The forward must come from the HOD's official institutional email address, and the subject line must start with <strong><code>NOC for my student</code></strong>.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-8" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-8" id="btn-3-8"><span class="q-number">3.8</span><span class="q-text">How do I download and upload the NOC?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-8" role="region" aria-labelledby="btn-3-8"><div class="answer-content"><p>Both happen on your <strong>dashboard</strong> at samagama.in once your result is out. You will see:</p><ol><li>A compact pill in the dark header bar</li><li>A standalone NOC card on the dashboard</li><li>A NOC section at the bottom of your full Result message</li></ol><p>The two buttons: <strong>Download blank NOC</strong> and <strong>Upload signed NOC (PDF)</strong> — the file must be a PDF of at most 1 MB.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-9" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-9" id="btn-3-9"><span class="q-number">3.9</span><span class="q-text">What if my NOC is not formally verified?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-9" role="region" aria-labelledby="btn-3-9"><div class="answer-content"><p>NOC verification takes time — typically between an hour and one full working day from the moment you upload.</p><p>If you need your offer letter sooner, upload a <strong>self-declaration</strong> on your profile and a <strong>tentative offer letter</strong> will be issued immediately. The formal offer letter follows once your NOC clears verification.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-10" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-10" id="btn-3-10"><span class="q-number">3.10</span><span class="q-text">My online course (Masai, NPTEL, Coursera, etc.) won't issue an NOC. What do I do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-10" role="region" aria-labelledby="btn-3-10"><div class="answer-content"><p>The internship is open only to candidates currently enrolled in a <strong>full-time degree programme</strong> at a recognised college or university. Online-only courses do not by themselves make a candidate eligible.</p><p>If you are concurrently enrolled in a full-time degree programme alongside the online course, obtain a NOC from that college.</p></div></div></div>
+
+      <div class="faq-item" id="q-3-11" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-11" id="btn-3-11"><span class="q-number">3.11</span><span class="q-text">My HOD wants written confirmation before signing my NOC. What do I show them?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-11" role="region" aria-labelledby="btn-3-11"><div class="answer-content"><p>Use the <strong>tentative offer letter</strong> route:</p><ol><li>Log in to samagama.in and open your profile</li><li>Upload a brief <strong>self-declaration</strong></li><li>A <strong>tentative offer letter</strong> is issued immediately</li><li>Hand it to your HOD — it serves as written confirmation</li></ol></div></div></div>
+
+      <div class="faq-item" id="q-3-12" data-category="s-3"><button class="faq-question" aria-expanded="false" aria-controls="a-3-12" id="btn-3-12"><span class="q-number">3.12</span><span class="q-text">Can Prof. Sudarshan Iyengar or a faculty member from IIT Ropar sign my NOC?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-3-12" role="region" aria-labelledby="btn-3-12"><div class="answer-content"><p>Your NOC must be signed by an authorised signatory at the institution where you are enrolled as a student. Prof. Sudarshan Iyengar is a faculty member at IIT Ropar and cannot sign your NOC in a personal capacity. An online-only certification course does not meet the eligibility requirement on its own.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 4: Selection, Offer Letter ═══════ -->
+    <section class="faq-section" id="s-4" data-category="s-4">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2 class="section-title">Selection, Offer Letter &amp; Certificate</h2>
+        <span class="section-count"></span>
+      </div>
+
+      <div class="faq-item" id="q-4-1" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-1" id="btn-4-1"><span class="q-number">4.1</span><span class="q-text">How do I know I am selected?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-1" role="region" aria-labelledby="btn-4-1"><div class="answer-content"><p>If you can see your yellow VINS result panel on samagama.in, you are selected. There is no separate selection step or confirmation email.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-2" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-2" id="btn-4-2"><span class="q-number">4.2</span><span class="q-text">How do I opt into VINS?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-2" role="region" aria-labelledby="btn-4-2"><div class="answer-content"><p>Tell Yaksha in the chat: <em>"I want to take up the online internship without stipend."</em> Yaksha will confirm. Opting in <strong>is</strong> the selection — no separate confirmation email is sent.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-3" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-3" id="btn-4-3"><span class="q-number">4.3</span><span class="q-text">When do I get the offer letter?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-3" role="region" aria-labelledby="btn-4-3"><div class="answer-content"><p><strong>Path 1 — Formal offer letter (default).</strong> Issued once your signed NOC is verified and you have confirmed your dates.</p><p><strong>Path 2 — Tentative offer letter (faster).</strong> Upload a self-declaration and a tentative offer letter is issued immediately.</p><p>The offer letter lives on your dashboard at samagama.in, not in your email.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-4" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-4" id="btn-4-4"><span class="q-number">4.4</span><span class="q-text">Will I get a certificate?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-4" role="region" aria-labelledby="btn-4-4"><div class="answer-content"><p><strong>Yes — every intern who completes the internship gets a certificate</strong> from Vicharanashala, IIT Ropar. Candidates who drop out mid-way do not get a certificate.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-5" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-5" id="btn-4-5"><span class="q-number">4.5</span><span class="q-text">How do I confirm my internship dates?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-5" role="region" aria-labelledby="btn-4-5"><div class="answer-content"><p>On the dashboard, you will see a yellow card titled <strong>"🗓️ Confirm your internship dates"</strong>. Edit dates to your earliest realistic start — your end must be on or before <strong>31 December 2026</strong>. You can save your dates before or after uploading your NOC.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-6" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-6" id="btn-4-6"><span class="q-number">4.6</span><span class="q-text">I am a minor/major in AI student — can I join the programme?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-6" role="region" aria-labelledby="btn-4-6"><div class="answer-content"><p>Minor/Major in AI course from IIT Ropar is a certification course and there will be a different track of internship equivalent. Kindly write to us separately. You should be a registered student in a UG/PG programme. This internship is exclusively meant for students, not working professionals.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-7" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-7" id="btn-4-7"><span class="q-number">4.7</span><span class="q-text">How do I accept the offer letter?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-7" role="region" aria-labelledby="btn-4-7"><div class="answer-content"><p><strong>Reply All</strong> on the offer-letter thread and paste the acceptance statement <strong>exactly as printed</strong>:</p><blockquote>I, [Full Name], confirm that I have read, understood, and accepted all terms, conditions, and obligations set out in this offer letter and in the program FAQ at samagama.in. I formally accept the offer of Summer Internship 2026.</blockquote><p><strong>Copy-paste this sentence as-is.</strong> The reply must reach us within <strong>5 days</strong>.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-8" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-8" id="btn-4-8"><span class="q-number">4.8</span><span class="q-text">What if I reply without using the exact acceptance format?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-8" role="region" aria-labelledby="btn-4-8"><div class="answer-content"><p>The offer is <strong>withdrawn</strong>, effective immediately. This is a deliberate attention-to-detail check.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-9" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-9" id="btn-4-9"><span class="q-number">4.9</span><span class="q-text">I received a withdrawal email — can it be reversed?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-9" role="region" aria-labelledby="btn-4-9"><div class="answer-content"><p>There is an appeal path. Send a <strong>fresh email</strong> to <code>sudarshansudarshan@gmail.com</code> with the subject exactly: <strong>Request to Reconsider: Confirmation Reply Error</strong>. If the reason is genuine, we will respond within 24 hours.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-10" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-10" id="btn-4-10"><span class="q-number">4.10</span><span class="q-text">What happens after I send my acceptance? My dashboard doesn't update.</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-10" role="region" aria-labelledby="btn-4-10"><div class="answer-content"><p>The dashboard does <strong>not</strong> track the acceptance email. This is normal. We process acceptance emails manually. If your reply was compliant, no further action is needed.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-11" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-11" id="btn-4-11"><span class="q-number">4.11</span><span class="q-text">Can I change my internship dates?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-11" role="region" aria-labelledby="btn-4-11"><div class="answer-content"><p><strong>Before the offer letter:</strong> yes — edit via the dashboard card. <strong>After the offer letter:</strong> no, dates are final.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-12" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-12" id="btn-4-12"><span class="q-number">4.12</span><span class="q-text">When and how do I get the Zoom link for the kickoff meeting?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-12" role="region" aria-labelledby="btn-4-12"><div class="answer-content"><p>The Zoom link is delivered via <strong>email</strong> and your <strong>Yaksha chat portal</strong>. The kickoff is for the main summer cohort only.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-13" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-13" id="btn-4-13"><span class="q-number">4.13</span><span class="q-text">My NOC is not ready but my start date is approaching. What do I do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-13" role="region" aria-labelledby="btn-4-13"><div class="answer-content"><p>Upload a <strong>self-declaration</strong> — a tentative offer letter is issued immediately. You then have a 15-day window to upload the proper signed NOC.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-14" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-14" id="btn-4-14"><span class="q-number">4.14</span><span class="q-text">When does my internship actually begin?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-14" role="region" aria-labelledby="btn-4-14"><div class="answer-content"><p>Your internship begins on the <strong>start date you confirmed</strong> on the dashboard. There is no separate "your internship has begun" notification.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-15" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-15" id="btn-4-15"><span class="q-number">4.15</span><span class="q-text">Can I switch from VINS (online) to VISE (offline)?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-15" role="region" aria-labelledby="btn-4-15"><div class="answer-content"><p>The two tracks are finalised at the interview stage, and we do not move candidates between them. VISE has a fixed on-campus capacity.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-16" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-16" id="btn-4-16"><span class="q-number">4.16</span><span class="q-text">Can I change my internship dates after the offer letter?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-16" role="region" aria-labelledby="btn-4-16"><div class="answer-content"><p><strong>No.</strong> Once your offer letter has been issued, the dates are final.</p></div></div></div>
+
+      <div class="faq-item" id="q-4-17" data-category="s-4"><button class="faq-question" aria-expanded="false" aria-controls="a-4-17" id="btn-4-17"><span class="q-number">4.17</span><span class="q-text">How do I get the link for daily Zoom standups? Are they mandatory?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-4-17" role="region" aria-labelledby="btn-4-17"><div class="answer-content"><p>Daily Zoom standup links are posted in the <strong>Announcements section</strong> on samagama.in. <strong>Attending daily standups is mandatory for all interns.</strong></p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 5: Work, Mentorship ═══════ -->
+    <section class="faq-section" id="s-5" data-category="s-5">
+      <div class="section-header"><span class="section-number">05</span><h2 class="section-title">Work, Mentorship &amp; Projects</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-5-1" data-category="s-5"><button class="faq-question" aria-expanded="false" aria-controls="a-5-1" id="btn-5-1"><span class="q-number">5.1</span><span class="q-text">What will I work on?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-5-1" role="region" aria-labelledby="btn-5-1"><div class="answer-content"><p>A real open-source project from Vicharanashala's portfolio — assigned based on your background. Areas range across AI/ML, web development, NLP, computer vision, agriculture-tech (Annam.AI), education-tech (ViBe), and open-source infrastructure.</p></div></div></div>
+      <div class="faq-item" id="q-5-2" data-category="s-5"><button class="faq-question" aria-expanded="false" aria-controls="a-5-2" id="btn-5-2"><span class="q-number">5.2</span><span class="q-text">How many hours per day?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-5-2" role="region" aria-labelledby="btn-5-2"><div class="answer-content"><p>Plan for <strong>6 to 10 hours a day</strong>, sometimes more during the build phase. This is a full-time internship.</p></div></div></div>
+      <div class="faq-item" id="q-5-3" data-category="s-5"><button class="faq-question" aria-expanded="false" aria-controls="a-5-3" id="btn-5-3"><span class="q-number">5.3</span><span class="q-text">Who is my mentor?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-5-3" role="region" aria-labelledby="btn-5-3"><div class="answer-content"><p>You will work with the lab's research and engineering team. The exact mentor depends on the project. The model is fluid — you will get help from a senior researcher one day, a peer the next.</p></div></div></div>
+      <div class="faq-item" id="q-5-4" data-category="s-5"><button class="faq-question" aria-expanded="false" aria-controls="a-5-4" id="btn-5-4"><span class="q-number">5.4</span><span class="q-text">Is there a stipend?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-5-4" role="region" aria-labelledby="btn-5-4"><div class="answer-content"><p>No. The internship is unpaid. Stellar performers may be recognised with a discretionary stipend at the lab's option, but this is not promised or expected.</p></div></div></div>
+      <div class="faq-item" id="q-5-5" data-category="s-5"><button class="faq-question" aria-expanded="false" aria-controls="a-5-5" id="btn-5-5"><span class="q-number">5.5</span><span class="q-text">Do I need my own laptop? Should I preload any software?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-5-5" role="region" aria-labelledby="btn-5-5"><div class="answer-content"><p><strong>Yes — a personal laptop is required.</strong> We prefer Linux or macOS. If you use Windows, install WSL or PuTTY.</p></div></div></div>
+      <div class="faq-item" id="q-5-6" data-category="s-5"><button class="faq-question" aria-expanded="false" aria-controls="a-5-6" id="btn-5-6"><span class="q-number">5.6</span><span class="q-text">I am using a different email on GitHub / Zoom / the learning platform. Is that okay?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-5-6" role="region" aria-labelledby="btn-5-6"><div class="answer-content"><p>No. <strong>Your registered email is your sole identifier across all programme platforms.</strong> Mismatches cannot be retroactively corrected.</p></div></div></div>
+      <div class="faq-item" id="q-5-7" data-category="s-5"><button class="faq-question" aria-expanded="false" aria-controls="a-5-7" id="btn-5-7"><span class="q-number">5.7</span><span class="q-text">Why has my mentor not been assigned yet?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-5-7" role="region" aria-labelledby="btn-5-7"><div class="answer-content"><p>Mentors are not assigned on day 1. You will be assigned a mentor when you move on to the <strong>project phase</strong>, after completing the mandatory Bronze coursework.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 6: Communication ═══════ -->
+    <section class="faq-section" id="s-6" data-category="s-6">
+      <div class="section-header"><span class="section-number">06</span><h2 class="section-title">Code of Conduct — Communication Channels</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-6-1" data-category="s-6"><button class="faq-question" aria-expanded="false" aria-controls="a-6-1" id="btn-6-1"><span class="q-number">6.1</span><span class="q-text">What are the official communication channels?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-6-1" role="region" aria-labelledby="btn-6-1"><div class="answer-content"><ol><li><strong>Announcements section on samagama.in</strong> — all programme notifications</li><li><strong>Yaksha chat</strong> on samagama.in — primary channel for questions. Use <code>#escalate</code> to reach a human.</li><li><strong>Discussion forum</strong> — for peer discussions</li><li><strong>Email to sudarshansudarshan@gmail.com</strong> — last resort only</li></ol><p><strong>WhatsApp support is cancelled.</strong> Unofficial groups are strictly prohibited and will lead to immediate termination.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 7: Interviews ═══════ -->
+    <section class="faq-section" id="s-7" data-category="s-7">
+      <div class="section-header"><span class="section-number">07</span><h2 class="section-title">Interviews Related</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-7-1" data-category="s-7"><button class="faq-question" aria-expanded="false" aria-controls="a-7-1" id="btn-7-1"><span class="q-number">7.1</span><span class="q-text">My interview is not marked as complete on the dashboard — what do I do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-7-1" role="region" aria-labelledby="btn-7-1"><div class="answer-content"><p>A data-sync issue sometimes occurs. The team will check your record and manually mark it as complete if needed. You will be unblocked within 1–2 hours. If the issue persists, email sudarshansudarshan@gmail.com.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 8: Certificate ═══════ -->
+    <section class="faq-section" id="s-8" data-category="s-8">
+      <div class="section-header"><span class="section-number">08</span><h2 class="section-title">Certificate</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-8-1" data-category="s-8"><button class="faq-question" aria-expanded="false" aria-controls="a-8-1" id="btn-8-1"><span class="q-number">8.1</span><span class="q-text">Does Vicharanashala send a grade report to my university?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-8-1" role="region" aria-labelledby="btn-8-1"><div class="answer-content"><p>No. The certificate issued upon completion is the document you can submit to your college. We don't have a process for sending grade reports to universities.</p></div></div></div>
+      <div class="faq-item" id="q-8-2" data-category="s-8"><button class="faq-question" aria-expanded="false" aria-controls="a-8-2" id="btn-8-2"><span class="q-number">8.2</span><span class="q-text">Does the certificate specify whether it was completed online or offline?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-8-2" role="region" aria-labelledby="btn-8-2"><div class="answer-content"><p>No. The certificate is the same for both tracks and does not specify the mode.</p></div></div></div>
+      <div class="faq-item" id="q-8-3" data-category="s-8"><button class="faq-question" aria-expanded="false" aria-controls="a-8-3" id="btn-8-3"><span class="q-number">8.3</span><span class="q-text">Will the certificate be a physical hardcopy or an e-certificate?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-8-3" role="region" aria-labelledby="btn-8-3"><div class="answer-content"><p>It is issued as an e-certificate — downloaded from your dashboard. We do not print and mail physical copies. It is digitally signed and verifiable.</p></div></div></div>
+      <div class="faq-item" id="q-8-4" data-category="s-8"><button class="faq-question" aria-expanded="false" aria-controls="a-8-4" id="btn-8-4"><span class="q-number">8.4</span><span class="q-text">Is there a WhatsApp group for candidates?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-8-4" role="region" aria-labelledby="btn-8-4"><div class="answer-content"><p>No. See §6.1 for the official communication channels.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 9: Rosetta Journal ═══════ -->
+    <section class="faq-section" id="s-9" data-category="s-9">
+      <div class="section-header"><span class="section-number">09</span><h2 class="section-title">Rosetta — Your Internship Journal</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-9-1" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-1" id="btn-9-1"><span class="q-number">9.1</span><span class="q-text">What is Rosetta?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-1" role="region" aria-labelledby="btn-9-1"><div class="answer-content"><p>Rosetta is your internship journal — a 65-day document, one entry per day, every day. You write in it daily, keep it privately, and submit it at the end of the internship.</p></div></div></div>
+      <div class="faq-item" id="q-9-2" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-2" id="btn-9-2"><span class="q-number">9.2</span><span class="q-text">Why does this exist? Is it just busywork?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-2" role="region" aria-labelledby="btn-9-2"><div class="answer-content"><p>No. It exists so you can process and articulate your learning experience. Students who reflect regularly get more out of it. For us, it provides qualitative insight to improve the programme.</p></div></div></div>
+      <div class="faq-item" id="q-9-3" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-3" id="btn-9-3"><span class="q-number">9.3</span><span class="q-text">What is a "thinking routine"?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-3" role="region" aria-labelledby="btn-9-3"><div class="answer-content"><p>A short framework that gives your reflection a specific shape. Examples: <strong>3-2-1</strong> (3 things you engaged with, 2 questions, 1 surprise), <strong>Muddy / Clear</strong>, <strong>What? So What? Now What?</strong> — the routines rotate across 65 days.</p></div></div></div>
+      <div class="faq-item" id="q-9-4" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-4" id="btn-9-4"><span class="q-number">9.4</span><span class="q-text">How do I get my Rosetta journal?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-4" role="region" aria-labelledby="btn-9-4"><div class="answer-content"><p>Shared as a Google Doc template during orientation. Make a copy to your own Drive and rename it <code>Rosetta — [Your Name] — Summership 2026</code>.</p></div></div></div>
+      <div class="faq-item" id="q-9-5" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-5" id="btn-9-5"><span class="q-number">9.5</span><span class="q-text">How do I use it day to day?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-5" role="region" aria-labelledby="btn-9-5"><div class="answer-content"><p>Open your doc → scroll to today's entry → fill in the date → read the thinking routine → answer the prompts. It takes 10–20 minutes.</p></div></div></div>
+      <div class="faq-item" id="q-9-6" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-6" id="btn-9-6"><span class="q-number">9.6</span><span class="q-text">How long should each entry be?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-6" role="region" aria-labelledby="btn-9-6"><div class="answer-content"><p>No minimum or maximum. Three to five sentences per prompt is usually enough. One-word answers or AI-generated text are not acceptable.</p></div></div></div>
+      <div class="faq-item" id="q-9-7" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-7" id="btn-9-7"><span class="q-number">9.7</span><span class="q-text">What is the one rule?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-7" role="region" aria-labelledby="btn-9-7"><div class="answer-content"><p><strong>Write what is true.</strong> Not what sounds impressive. If you hated today, write that. If something clicked, write that.</p></div></div></div>
+      <div class="faq-item" id="q-9-8" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-8" id="btn-9-8"><span class="q-number">9.8</span><span class="q-text">Can I use ChatGPT or any AI tool to write my entries?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-8" role="region" aria-labelledby="btn-9-8"><div class="answer-content"><p><strong>No.</strong> AI-generated entries will not be counted. The journal must be in your voice, from your actual experience.</p></div></div></div>
+      <div class="faq-item" id="q-9-9" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-9" id="btn-9-9"><span class="q-number">9.9</span><span class="q-text">What if I miss a day?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-9" role="region" aria-labelledby="btn-9-9"><div class="answer-content"><p>Fill it in as soon as you can. Write the actual date you are filling it in. A late honest entry is always better than no entry.</p></div></div></div>
+      <div class="faq-item" id="q-9-10" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-10" id="btn-9-10"><span class="q-number">9.10</span><span class="q-text">Will anyone read my journal during the internship?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-10" role="region" aria-labelledby="btn-9-10"><div class="answer-content"><p><strong>No.</strong> We read it only after you submit it at the end.</p></div></div></div>
+      <div class="faq-item" id="q-9-11" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-11" id="btn-9-11"><span class="q-number">9.11</span><span class="q-text">Can the prompts change mid-internship?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-11" role="region" aria-labelledby="btn-9-11"><div class="answer-content"><p>Occasionally, yes. We will announce changes in the Announcements section on samagama.in.</p></div></div></div>
+      <div class="faq-item" id="q-9-12" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-12" id="btn-9-12"><span class="q-number">9.12</span><span class="q-text">How do I submit Rosetta at the end?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-12" role="region" aria-labelledby="btn-9-12"><div class="answer-content"><p>Share your Google Doc with the coordinator's email as <strong>Viewer</strong>. Ensure your name is in the title, all 65 entries are filled, and your cover page is complete.</p></div></div></div>
+      <div class="faq-item" id="q-9-13" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-13" id="btn-9-13"><span class="q-number">9.13</span><span class="q-text">I have a question about Rosetta not answered here. What do I do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-13" role="region" aria-labelledby="btn-9-13"><div class="answer-content"><p>Ask Yaksha first. If Yaksha cannot answer it, escalate to your programme coordinator.</p></div></div></div>
+      <div class="faq-item" id="q-9-14" data-category="s-9"><button class="faq-question" aria-expanded="false" aria-controls="a-9-14" id="btn-9-14"><span class="q-number">9.14</span><span class="q-text">My college requires written confirmation that the internship is self-paced. What document can I share?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-9-14" role="region" aria-labelledby="btn-9-14"><div class="answer-content"><p>This is not a self-paced internship, but a very rigorous one which is time demanding. It is not permitted for one to be part of any other activity during this period.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 10: Phase 1 ═══════ -->
+    <section class="faq-section" id="s-10" data-category="s-10">
+      <div class="section-header"><span class="section-number">10</span><h2 class="section-title">Phase 1 — Coursework, ViBe LMS &amp; Live Sessions</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-10-1" data-category="s-10"><button class="faq-question" aria-expanded="false" aria-controls="a-10-1" id="btn-10-1"><span class="q-number">10.1</span><span class="q-text">I've previously interned with VLED — am I exempt from any coursework?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-10-1" role="region" aria-labelledby="btn-10-1"><div class="answer-content"><p><strong>Yes — partially.</strong> If you completed the MERN Stack coursework previously, you don't need to repeat it. However, the <strong>AI Fundamentals course is mandatory for everyone</strong>, including returning interns.</p></div></div></div>
+      <div class="faq-item" id="q-10-2" data-category="s-10"><button class="faq-question" aria-expanded="false" aria-controls="a-10-2" id="btn-10-2"><span class="q-number">10.2</span><span class="q-text">How do I register for the AI Fundamentals course on ViBe?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-10-2" role="region" aria-labelledby="btn-10-2"><div class="answer-content"><p>Click the registration link in Announcements → Sign in to ViBe with the same Gmail as Samagama → Open the link again after login → Complete the registration form → The course appears on your dashboard.</p></div></div></div>
+      <div class="faq-item" id="q-10-3" data-category="s-10"><button class="faq-question" aria-expanded="false" aria-controls="a-10-3" id="btn-10-3"><span class="q-number">10.3</span><span class="q-text">I registered on ViBe with a different email — is that OK?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-10-3" role="region" aria-labelledby="btn-10-3"><div class="answer-content"><p>Use the same email on both platforms. If your Samagama email isn't Gmail, tell Yaksha using: <code>#vibe-email your-gmail@gmail.com</code></p></div></div></div>
+      <div class="faq-item" id="q-10-4" data-category="s-10"><button class="faq-question" aria-expanded="false" aria-controls="a-10-4" id="btn-10-4"><span class="q-number">10.4</span><span class="q-text">Are live sessions mandatory if I'm on the viva route?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-10-4" role="region" aria-labelledby="btn-10-4"><div class="answer-content"><p><strong>Yes — live sessions are mandatory for every intern, regardless of path.</strong></p></div></div></div>
+      <div class="faq-item" id="q-10-5" data-category="s-10"><button class="faq-question" aria-expanded="false" aria-controls="a-10-5" id="btn-10-5"><span class="q-number">10.5</span><span class="q-text">Where do I find the daily live-session schedule?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-10-5" role="region" aria-labelledby="btn-10-5"><div class="answer-content"><p>In the <strong>Announcements section on samagama.in</strong>, posted at least 1 hour before the session.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 11: Yaksha Chat ═══════ -->
+    <section class="faq-section" id="s-11" data-category="s-11">
+      <div class="section-header"><span class="section-number">11</span><h2 class="section-title">Yaksha Chat Related</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-11-1" data-category="s-11"><button class="faq-question" aria-expanded="false" aria-controls="a-11-1" id="btn-11-1"><span class="q-number">11.1</span><span class="q-text">I'm unable to type in the chat after clicking 'Interact with Yaksha' — what should I do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-11-1" role="region" aria-labelledby="btn-11-1"><div class="answer-content"><p>Scroll up to the top of your window and click on the 'Chat with Yaksha' button to activate Yaksha.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 12: ViBe Platform ═══════ -->
+    <section class="faq-section" id="s-12" data-category="s-12">
+      <div class="section-header"><span class="section-number">12</span><h2 class="section-title">ViBe Platform</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-12-1" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-1" id="btn-12-1"><span class="q-number">12.1</span><span class="q-text">How do I log in to ViBe?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-1" role="region" aria-labelledby="btn-12-1"><div class="answer-content"><p>Go to <a href="https://vibe.vicharanashala.ai/auth" target="_blank">vibe.vicharanashala.ai/auth</a>. Sign up as a student with your registered email. Then check Notifications and accept the course invite.</p></div></div></div>
+      <div class="faq-item" id="q-12-2" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-2" id="btn-12-2"><span class="q-number">12.2</span><span class="q-text">Invite accepted but shows "No course enrolled"?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-2" role="region" aria-labelledby="btn-12-2"><div class="answer-content"><p>Check your email, try logging out/in, allow third-party cookies, fix DNS to Google DNS (8.8.8.8 / 8.8.4.4), and flush DNS cache.</p></div></div></div>
+      <div class="faq-item" id="q-12-3" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-3" id="btn-12-3"><span class="q-number">12.3</span><span class="q-text">Why are videos stuck or repeating?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-3" role="region" aria-labelledby="btn-12-3"><div class="answer-content"><p>Due to ViBe's monitored learning system. Stay on the ViBe tab, keep your camera on, and watch in a quiet, well-lit environment.</p></div></div></div>
+      <div class="faq-item" id="q-12-4" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-4" id="btn-12-4"><span class="q-number">12.4</span><span class="q-text">Can I use a mobile or tablet?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-4" role="region" aria-labelledby="btn-12-4"><div class="answer-content"><p>No, only <strong>desktop/laptop</strong> is supported.</p></div></div></div>
+      <div class="faq-item" id="q-12-5" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-5" id="btn-12-5"><span class="q-number">12.5</span><span class="q-text">How do I troubleshoot video issues on ViBe?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-5" role="region" aria-labelledby="btn-12-5"><div class="answer-content"><p>Try: refresh page → inspect console → log out/in → different browser → clear cache. If the issue persists, mention <code>#escalate-ViBe</code> in Yaksha.</p></div></div></div>
+      <div class="faq-item" id="q-12-6" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-6" id="btn-12-6"><span class="q-number">12.6</span><span class="q-text">My progress is showing less than 100% even though I completed everything. What should I do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-6" role="region" aria-labelledby="btn-12-6"><div class="answer-content"><p>Verify you've completed all items (1006/1006). Try refreshing or clearing cache and logging in again.</p></div></div></div>
+      <div class="faq-item" id="q-12-7" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-7" id="btn-12-7"><span class="q-number">12.7</span><span class="q-text">Can I request an exception or bypass the ViBe system?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-7" role="region" aria-labelledby="btn-12-7"><div class="answer-content"><p>There is a formal alternative: a three-hour proctored exam with two cameras and a live proctor. Score below 60% = join next cohort. Above 80% = passed. The standard ViBe flow is usually faster.</p></div></div></div>
+      <div class="faq-item" id="q-12-8" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-8" id="btn-12-8"><span class="q-number">12.8</span><span class="q-text">Is the ViBe consent form compulsory?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-8" role="region" aria-labelledby="btn-12-8"><div class="answer-content"><p>Yes — consent is mandatory. Camera and microphone access are required. Without consent, you cannot proceed with the course.</p></div></div></div>
+      <div class="faq-item" id="q-12-9" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-9" id="btn-12-9"><span class="q-number">12.9</span><span class="q-text">What are penalty scores on ViBe?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-9" role="region" aria-labelledby="btn-12-9"><div class="answer-content"><p>Generated when anomalies are detected. They do <strong>not impact your HP or evaluation</strong> — their purpose is ensuring proper engagement.</p></div></div></div>
+      <div class="faq-item" id="q-12-10" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-10" id="btn-12-10"><span class="q-number">12.10</span><span class="q-text">When should I use the Flag option on ViBe?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-10" role="region" aria-labelledby="btn-12-10"><div class="answer-content"><p>Use Flag only for content-related issues. For technical/platform issues, contact Yaksha instead.</p></div></div></div>
+      <div class="faq-item" id="q-12-11" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-11" id="btn-12-11"><span class="q-number">12.11</span><span class="q-text">What is Linear Progression on ViBe?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-11" role="region" aria-labelledby="btn-12-11"><div class="answer-content"><p>Each learner must watch videos and attempt quizzes in exact order. You cannot skip ahead — each item unlocks after the previous one is completed.</p></div></div></div>
+      <div class="faq-item" id="q-12-12" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-12" id="btn-12-12"><span class="q-number">12.12</span><span class="q-text">Can I use the left navigation panel to jump ahead?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-12" role="region" aria-labelledby="btn-12-12"><div class="answer-content"><p>No. Use <strong>Next Quiz</strong> or <strong>Next Lesson</strong> on the right panel. Jumping ahead triggers the Access Restricted alert.</p></div></div></div>
+      <div class="faq-item" id="q-12-13" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-13" id="btn-12-13"><span class="q-number">12.13</span><span class="q-text">I'm seeing a red "Access Restricted" banner. Is this a bug?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-13" role="region" aria-labelledby="btn-12-13"><div class="answer-content"><p>No, it's not a bug. It means you tried to access an item before completing all previous items.</p></div></div></div>
+      <div class="faq-item" id="q-12-14" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-14" id="btn-12-14"><span class="q-number">12.14</span><span class="q-text">How do I resolve the "Access Restricted" error?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-14" role="region" aria-labelledby="btn-12-14"><div class="answer-content"><p>Go back to the left panel, find the item without a completion tick, complete it, and refresh.</p></div></div></div>
+      <div class="faq-item" id="q-12-15" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-15" id="btn-12-15"><span class="q-number">12.15</span><span class="q-text">Why does ViBe make me re-watch a clip after a quiz?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-15" role="region" aria-labelledby="btn-12-15"><div class="answer-content"><p>It's part of the design — not a penalty. Re-watches do not affect your HP or evaluation.</p></div></div></div>
+      <div class="faq-item" id="q-12-16" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-16" id="btn-12-16"><span class="q-number">12.16</span><span class="q-text">What kinds of quiz questions will I see on ViBe?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-16" role="region" aria-labelledby="btn-12-16"><div class="answer-content"><p>Four formats: <strong>Pick one (MCQ)</strong>, <strong>Pick one or more (MSQ)</strong>, <strong>Type a number (NAT)</strong>, and <strong>True or False</strong>.</p></div></div></div>
+      <div class="faq-item" id="q-12-17" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-17" id="btn-12-17"><span class="q-number">12.17</span><span class="q-text">Are the same proctoring rules applied to every course?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-17" role="region" aria-labelledby="btn-12-17"><div class="answer-content"><p>No. ViBe's proctoring is <strong>modular</strong> — each check can be independently switched on or off by the instructor.</p></div></div></div>
+      <div class="faq-item" id="q-12-18" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-18" id="btn-12-18"><span class="q-number">12.18</span><span class="q-text">What does the "quiet helper" on ViBe actually do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-18" role="region" aria-labelledby="btn-12-18"><div class="answer-content"><p>Checks 5 things in real time: face visible, only one face, enough light, no background voices, and you're looking at the screen. Brief normal movements are fine.</p></div></div></div>
+      <div class="faq-item" id="q-12-19" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-19" id="btn-12-19"><span class="q-number">12.19</span><span class="q-text">Does ViBe record long videos of me?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-19" role="region" aria-labelledby="btn-12-19"><div class="answer-content"><p>No. ViBe does not continuously record videos of you. Camera and mic are used for real-time checks only.</p></div></div></div>
+      <div class="faq-item" id="q-12-20" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-20" id="btn-12-20"><span class="q-number">12.20</span><span class="q-text">What is the most common avoidable mistake?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-20" role="region" aria-labelledby="btn-12-20"><div class="answer-content"><p><strong>Sitting with a window directly behind you.</strong> Move the window to your side or in front of the laptop.</p></div></div></div>
+      <div class="faq-item" id="q-12-21" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-21" id="btn-12-21"><span class="q-number">12.21</span><span class="q-text">Why does the lesson keep pausing even when I'm paying attention?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-21" role="region" aria-labelledby="btn-12-21"><div class="answer-content"><p>Check: face too dark → add lamp. Face out of frame → adjust position. Background voices → close door. Switched tabs → stay on ViBe. Camera/mic dropped → check browser permissions.</p></div></div></div>
+      <div class="faq-item" id="q-12-22" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-22" id="btn-12-22"><span class="q-number">12.22</span><span class="q-text">Can I read quiz questions aloud or mutter to myself?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-22" role="region" aria-labelledby="btn-12-22"><div class="answer-content"><p>It's best not to. Watch in silence, answer in silence, and chat freely during breaks.</p></div></div></div>
+      <div class="faq-item" id="q-12-23" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-23" id="btn-12-23"><span class="q-number">12.23</span><span class="q-text">Can I study with a friend on camera?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-23" role="region" aria-labelledby="btn-12-23"><div class="answer-content"><p>In most courses, no. Only you should be in the camera frame. Discuss concepts before or after a ViBe lesson, not during it.</p></div></div></div>
+      <div class="faq-item" id="q-12-24" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-24" id="btn-12-24"><span class="q-number">12.24</span><span class="q-text">Will I lose progress if I clear my browser?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-24" role="region" aria-labelledby="btn-12-24"><div class="answer-content"><p>No. Progress is saved on the server, tied to your registered email.</p></div></div></div>
+      <div class="faq-item" id="q-12-25" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-25" id="btn-12-25"><span class="q-number">12.25</span><span class="q-text">Is there a recommended daily learning rhythm?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-25" role="region" aria-labelledby="btn-12-25"><div class="answer-content"><p>Yes — show up daily, take breaks between clips, and aim for ~3.33% progress per day.</p></div></div></div>
+      <div class="faq-item" id="q-12-26" data-category="s-12"><button class="faq-question" aria-expanded="false" aria-controls="a-12-26" id="btn-12-26"><span class="q-number">12.26</span><span class="q-text">What should my "study corner" look like?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-12-26" role="region" aria-labelledby="btn-12-26"><div class="answer-content"><p>Light in front of your face, just you in the camera frame, and a reasonably quiet room.</p></div></div></div>
+    </section>
+
+    <!-- ═══════ SECTION 13: Team Formation ═══════ -->
+    <section class="faq-section" id="s-13" data-category="s-13">
+      <div class="section-header"><span class="section-number">13</span><h2 class="section-title">Team Formation</h2><span class="section-count"></span></div>
+      <div class="faq-item" id="q-13-1" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-1" id="btn-13-1"><span class="q-number">13.1</span><span class="q-text">Is team formation compulsory?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-1" role="region" aria-labelledby="btn-13-1"><div class="answer-content"><p>Yes. All projects in Phase 2 must be completed in teams.</p></div></div></div>
+      <div class="faq-item" id="q-13-2" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-2" id="btn-13-2"><span class="q-number">13.2</span><span class="q-text">What is the size of a team?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-2" role="region" aria-labelledby="btn-13-2"><div class="answer-content"><p>Fixed at <strong>four members</strong>.</p></div></div></div>
+      <div class="faq-item" id="q-13-3" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-3" id="btn-13-3"><span class="q-number">13.3</span><span class="q-text">How are teams formed?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-3" role="region" aria-labelledby="btn-13-3"><div class="answer-content"><p>May 15/16 starters formed teams through a structured activity. Later joiners are randomly assigned.</p></div></div></div>
+      <div class="faq-item" id="q-13-4" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-4" id="btn-13-4"><span class="q-number">13.4</span><span class="q-text">I started on May 15/16 but couldn't form a team. What happens?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-4" role="region" aria-labelledby="btn-13-4"><div class="answer-content"><p>You will be randomly assigned to a team.</p></div></div></div>
+      <div class="faq-item" id="q-13-5" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-5" id="btn-13-5"><span class="q-number">13.5</span><span class="q-text">There was a typo in our email addresses during team formation. Can we fix it?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-5" role="region" aria-labelledby="btn-13-5"><div class="answer-content"><p>No action needed. The administration will verify and match email IDs before finalizing teams.</p></div></div></div>
+      <div class="faq-item" id="q-13-6" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-6" id="btn-13-6"><span class="q-number">13.6</span><span class="q-text">I formed a team with only two members. Will it be considered?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-6" role="region" aria-labelledby="btn-13-6"><div class="answer-content"><p>No. Teams with fewer than four will be expanded by adding additional members.</p></div></div></div>
+      <div class="faq-item" id="q-13-7" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-7" id="btn-13-7"><span class="q-number">13.7</span><span class="q-text">What if a team member leaves during Phase 1?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-7" role="region" aria-labelledby="btn-13-7"><div class="answer-content"><p>A replacement may be assigned, or you continue as a team of three. Inform the admin immediately.</p></div></div></div>
+      <div class="faq-item" id="q-13-8" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-8" id="btn-13-8"><span class="q-number">13.8</span><span class="q-text">Can I form a team with someone from my own college?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-8" role="region" aria-labelledby="btn-13-8"><div class="answer-content"><p>No. Teams must consist of members from <strong>different institutions</strong>.</p></div></div></div>
+      <div class="faq-item" id="q-13-9" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-9" id="btn-13-9"><span class="q-number">13.9</span><span class="q-text">Can I form a team with students from my IIT MBS cohort?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-9" role="region" aria-labelledby="btn-13-9"><div class="answer-content"><p>No. Collaborate with participants outside your existing cohort.</p></div></div></div>
+      <div class="faq-item" id="q-13-10" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-10" id="btn-13-10"><span class="q-number">13.10</span><span class="q-text">Can we change our team name after submission?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-10" role="region" aria-labelledby="btn-13-10"><div class="answer-content"><p>Yes, team names are tentative and can be changed, but frequent changes are discouraged.</p></div></div></div>
+      <div class="faq-item" id="q-13-11" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-11" id="btn-13-11"><span class="q-number">13.11</span><span class="q-text">What if multiple teams choose the same name?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-11" role="region" aria-labelledby="btn-13-11"><div class="answer-content"><p>Teams will be distinguished using suffixes (e.g., Team X-1, Team X-2).</p></div></div></div>
+      <div class="faq-item" id="q-13-12" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-12" id="btn-13-12"><span class="q-number">13.12</span><span class="q-text">What should I do if I face issues within my team?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-12" role="region" aria-labelledby="btn-13-12"><div class="answer-content"><p>Report concerns immediately to your assigned scholar/mentor.</p></div></div></div>
+      <div class="faq-item" id="q-13-13" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-13" id="btn-13-13"><span class="q-number">13.13</span><span class="q-text">How will I know who my mentor is?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-13" role="region" aria-labelledby="btn-13-13"><div class="answer-content"><p>Your mentor will be the scholar assigned to your team's project.</p></div></div></div>
+      <div class="faq-item" id="q-13-14" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-14" id="btn-13-14"><span class="q-number">13.14</span><span class="q-text">When will I know my team details?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-14" role="region" aria-labelledby="btn-13-14"><div class="answer-content"><p>Announced in the Announcements section on samagama.in.</p></div></div></div>
+      <div class="faq-item" id="q-13-15" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-15" id="btn-13-15"><span class="q-number">13.15</span><span class="q-text">My name is not in the team list email. What should I do?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-15" role="region" aria-labelledby="btn-13-15"><div class="answer-content"><p>Announcements are phased — your name may appear in a later list. If still unassigned, raise it on Yaksha.</p></div></div></div>
+      <div class="faq-item" id="q-13-16" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-16" id="btn-13-16"><span class="q-number">13.16</span><span class="q-text">We were assigned a different project than our top priority. Can we change?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-16" role="region" aria-labelledby="btn-13-16"><div class="answer-content"><p>No. Project assignments are final.</p></div></div></div>
+      <div class="faq-item" id="q-13-17" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-17" id="btn-13-17"><span class="q-number">13.17</span><span class="q-text">I just started. Can I form my own team now?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-17" role="region" aria-labelledby="btn-13-17"><div class="answer-content"><p>No. Teams will be randomly assigned. Wait for official communication.</p></div></div></div>
+      <div class="faq-item" id="q-13-18" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-18" id="btn-13-18"><span class="q-number">13.18</span><span class="q-text">When do team activities begin?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-18" role="region" aria-labelledby="btn-13-18"><div class="answer-content"><p>In <strong>Phase 2</strong>. During Phase 1 you do not need to worry about team activities.</p></div></div></div>
+      <div class="faq-item" id="q-13-19" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-19" id="btn-13-19"><span class="q-number">13.19</span><span class="q-text">Can I request a specific teammate after teams are assigned?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-19" role="region" aria-labelledby="btn-13-19"><div class="answer-content"><p>No. Team assignments are final.</p></div></div></div>
+      <div class="faq-item" id="q-13-20" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-20" id="btn-13-20"><span class="q-number">13.20</span><span class="q-text">What if a team member is inactive or not contributing?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-20" role="region" aria-labelledby="btn-13-20"><div class="answer-content"><p>Report the issue to your mentor/scholar early.</p></div></div></div>
+      <div class="faq-item" id="q-13-21" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-21" id="btn-13-21"><span class="q-number">13.21</span><span class="q-text">Can I switch teams if there are conflicts?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-21" role="region" aria-labelledby="btn-13-21"><div class="answer-content"><p>Not allowed except in exceptional admin-approved cases.</p></div></div></div>
+      <div class="faq-item" id="q-13-22" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-22" id="btn-13-22"><span class="q-number">13.22</span><span class="q-text">Will team performance affect individual evaluation?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-22" role="region" aria-labelledby="btn-13-22"><div class="answer-content"><p>Yes. Team deliverables are a key part of evaluation.</p></div></div></div>
+      <div class="faq-item" id="q-13-23" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-23" id="btn-13-23"><span class="q-number">13.23</span><span class="q-text">How will communication happen within teams?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-23" role="region" aria-labelledby="btn-13-23"><div class="answer-content"><p>Teams self-organise over <strong>LinkedIn or email</strong> only. WhatsApp team groups are not permitted.</p></div></div></div>
+      <div class="faq-item" id="q-13-24" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-24" id="btn-13-24"><span class="q-number">13.24</span><span class="q-text">What if I miss the team allocation announcement?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-24" role="region" aria-labelledby="btn-13-24"><div class="answer-content"><p>Check the Announcements section on samagama.in regularly.</p></div></div></div>
+      <div class="faq-item" id="q-13-25" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-25" id="btn-13-25"><span class="q-number">13.25</span><span class="q-text">Can a team be dissolved and reformed?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-25" role="region" aria-labelledby="btn-13-25"><div class="answer-content"><p>No. Once finalized, teams are locked.</p></div></div></div>
+      <div class="faq-item" id="q-13-26" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-26" id="btn-13-26"><span class="q-number">13.26</span><span class="q-text">What happens if I drop out of the internship?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-26" role="region" aria-labelledby="btn-13-26"><div class="answer-content"><p>Your team will be adjusted — remaining members continue as a team of three or receive a replacement.</p></div></div></div>
+      <div class="faq-item" id="q-13-27" data-category="s-13"><button class="faq-question" aria-expanded="false" aria-controls="a-13-27" id="btn-13-27"><span class="q-number">13.27</span><span class="q-text">Will we get time to know our teammates before Phase 2?</span><span class="chevron-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button><div class="faq-answer" id="a-13-27" role="region" aria-labelledby="btn-13-27"><div class="answer-content"><p>Yes. There is typically a buffer period before Phase 2.</p></div></div></div>
+    </section>
+
+  </main>
+
+  <!-- YAKSHA-MINI AI CHATBOT SIDEBAR (RIGHT) -->
+  <aside class="yaksha-sidebar" id="yaksha-sidebar">
+    <div class="yaksha-sticky">
+      <div class="yaksha-header">
+        <div class="yaksha-avatar">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="20" fill="url(#ygrad)"/>
+            <defs><linearGradient id="ygrad" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#f0c040"/><stop offset="100%" stop-color="#c9a035"/></linearGradient></defs>
+            <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="18" font-weight="700" fill="#0a0a0f">Y</text>
+          </svg>
+        </div>
+        <div class="yaksha-header-info">
+          <h3 class="yaksha-name">Yaksha-mini</h3>
+          <span class="yaksha-status"><span class="yaksha-dot"></span>AI Assistant</span>
+        </div>
+        <button class="yaksha-voice-btn" id="yaksha-voice-btn" title="Toggle voice mode" aria-label="Toggle voice mode">
+          <svg id="yaksha-mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+      </div>
+
+      <div class="yaksha-messages" id="yaksha-messages">
+        <div class="yaksha-msg yaksha-msg--bot">
+          <div class="yaksha-bubble">
+            👋 Hi! I'm <strong>Yaksha-mini</strong>, your AI guide for the Vicharanashala Internship FAQ. Ask me anything — NOC, stipend, timeline, ViBe, or certificates!
+          </div>
+          <span class="yaksha-time">Just now</span>
+        </div>
+      </div>
+
+      <div class="yaksha-voice-panel" id="yaksha-voice-panel">
+        <div class="yaksha-voice-ring" id="yaksha-voice-ring">
+          <div class="yaksha-voice-pulse"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <p class="yaksha-voice-label" id="yaksha-voice-label">Tap mic to speak</p>
+        <button class="yaksha-voice-stop" id="yaksha-voice-stop" onclick="stopVoiceMode()">Stop</button>
+      </div>
+
+      <div class="yaksha-input-area">
+        <input type="text" class="yaksha-input" id="yaksha-input" placeholder="Ask about NOC, ViBe, stipend…" autocomplete="off" maxlength="300"/>
+        <button class="yaksha-send" id="yaksha-send" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ─── VOICE AGENT MODAL ─── -->
+<div class="voice-modal-overlay" id="voice-modal-overlay" onclick="closeVoiceAgent(event)">
+  <div class="voice-modal" id="voice-modal">
+    <button class="voice-modal-close" id="voice-modal-close" onclick="closeVoiceAgent()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="voice-modal-inner">
+      <div class="voice-modal-avatar">
+        <div class="voice-modal-ring" id="voice-modal-ring">
+          <div class="voice-modal-pulse"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+      </div>
+      <h2 class="voice-modal-title">Yaksha Voice Agent</h2>
+      <p class="voice-modal-subtitle">Ask your question — I'm listening</p>
+      <div class="voice-modal-status" id="voice-modal-status">Ready to listen</div>
+      <div class="voice-modal-transcript" id="voice-modal-transcript"></div>
+      <div class="voice-modal-controls">
+        <button class="voice-modal-btn" id="voice-modal-start" onclick="startModalVoice()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Start Speaking
+        </button>
+        <button class="voice-modal-btn voice-modal-btn--stop" id="voice-modal-stop" onclick="stopModalVoice()" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          Stop
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer class="site-footer" id="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-mark">V</span>
+      <p>Vicharanashala Lab · Indian Institute of Technology Ropar · 2026 Cycle</p>
+    </div>
+    <div class="footer-links">
+      <a href="https://samagama.in" target="_blank" rel="noopener">samagama.in</a>
+      <a href="https://www.linkedin.com/company/vicharanashala/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <p class="footer-note">Questions? Log in at <a href="https://samagama.in" target="_blank" rel="noopener">samagama.in</a> and ask Yaksha.</p>
+  </div>
+</footer>
+
+<!-- ─── BACK TO TOP ─── -->
+<button class="back-to-top" id="back-to-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script src="script.js"></script>
+</body>
+</html>

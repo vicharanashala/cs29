@@ -1,0 +1,22 @@
+/* Reset #root to be full-width — reference.css handles all design tokens */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* No max-width, no padding, no centering — reference.css controls layout */
+}

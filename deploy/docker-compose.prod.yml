@@ -1,0 +1,16 @@
+services:
+  backend:
+    image: ${DOCKER_USERNAME}/vicharanashala-backend:latest
+    restart: always
+    ports:
+      - "3001:3001"
+    env_file:
+      - /home/ubuntu/backend.env
+
+  frontend:
+    image: ${DOCKER_USERNAME}/vicharanashala-frontend:latest
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
