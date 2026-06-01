@@ -4,7 +4,7 @@ export const hi: Translations = {
   nav: {
     overview: 'अवलोकन',
     faq: 'सामान्य प्रश्न',
-    chat: 'यक्ष चैट',
+    chat: 'यक्ष-mini चैट',
     announcements: 'घोषणाएं',
     login: 'लॉगिन',
   },
@@ -37,13 +37,13 @@ export const hi: Translations = {
     inCategory: 'में',
   },
   chatPage: {
-    searchPlaceholder: 'यक्ष से पूछने से पहले FAQ त्वरित खोज…',
+    searchPlaceholder: 'यक्ष-mini से पूछने से पहले FAQ त्वरित खोज…',
   },
   landing: {
     heroTitle: 'आपका इंटर्न FAQ हब',
     heroSubtitle: 'AI-संचालित। वरिष्ठों द्वारा संपादित। VINS समुदाय के लिए निर्मित।',
     ctaFaq: 'FAQ देखें',
-    ctaChat: 'यक्ष से पूछें',
+    ctaChat: 'यक्ष-mini से पूछें',
     ctaRaise: 'समस्या दर्ज करें',
   },
 };

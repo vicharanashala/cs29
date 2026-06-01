@@ -21,7 +21,7 @@ import { AiService } from './ai/ai.service';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGO_URI as string),
+    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/samagama'),
     MongooseModule.forFeature([
       { name: FAQ.name, schema: FAQSchema },
       { name: PendingFaq.name, schema: PendingFaqSchema },

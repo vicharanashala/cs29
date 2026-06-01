@@ -10,6 +10,7 @@ import {
   createFaq,
   deleteFaq,
 } from '../api/admin';
+import { useAuth } from '../context/AuthContext';
 import '../reference.css';
 
 const CATEGORIES = [
@@ -25,7 +26,7 @@ const CATEGORIES = [
   'Timing & Dates',
   'ViBe Platform',
   'Work & Mentorship',
-  'Yaksha Chat',
+  'Yaksha-mini Chat',
 ];
 
 interface PendingFaq {
@@ -68,9 +69,8 @@ export default function AdminPage() {
   const [newA, setNewA] = useState('');
   const [newCat, setNewCat] = useState(CATEGORIES[0]);
 
-  const userRaw = localStorage.getItem('user');
-  const user = userRaw ? JSON.parse(userRaw) : null;
-  if (!user || user.role !== 'ADMIN') {
+  const { user: authUser, logout } = useAuth();
+  if (!authUser || authUser.role !== 'admin') {
     navigate({ to: '/login' });
     return null;
   }
@@ -135,12 +135,7 @@ export default function AdminPage() {
     createMut.mutate();
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
-    navigate({ to: '/' });
-  };
+
 
   const distinctCategories = new Set(faqs.map((f) => f.category)).size;
 
@@ -156,8 +151,8 @@ export default function AdminPage() {
             <span className="logo-text">Admin Panel</span>
           </a>
           <div className="admin-header-right">
-            <span className="admin-user-pill">{user.name}</span>
-            <button className="nav-pill nav-pill--action" onClick={handleLogout}>Sign out</button>
+            <span className="admin-user-pill">{authUser.name}</span>
+            <button className="nav-pill nav-pill--action" onClick={logout}>Sign out</button>
           </div>
         </div>
       </header>

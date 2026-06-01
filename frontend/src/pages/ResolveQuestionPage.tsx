@@ -9,6 +9,7 @@ interface Reply {
   role: 'student' | 'mentor' | 'admin';
   text: string;
   time: string;
+  authorEmail?: string;
 }
 
 interface Issue {
@@ -98,9 +99,11 @@ export const ResolveQuestionPage: React.FC = () => {
     return null;
   }
 
-  // Filter issues in queue (raised by others, and status === 'queue')
+  // Filter open community questions: raised by others, status is 'queue', and not yet replied to by this user
   const queueQuestions = issues.filter(issue => 
-    issue.status === 'queue' && issue.raisedBy !== user.email
+    issue.status === 'queue' && 
+    issue.raisedBy !== user.email &&
+    !issue.replies?.some(r => r.authorEmail === user.email || r.author.includes(user.email) || (user.name && r.author.includes(user.name)))
   );
 
   const activeQuestion = queueQuestions.find(i => i.id === selectedIssueId) || queueQuestions[0] || null;
@@ -118,6 +121,7 @@ export const ResolveQuestionPage: React.FC = () => {
           author: `${user.name || user.email.split('@')[0]} (Peer)`,
           role: 'student',
           text: answerText.trim(),
+          authorEmail: user.email,
         }),
       });
 

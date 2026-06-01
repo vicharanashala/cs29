@@ -244,7 +244,7 @@ export const LandingPage: React.FC = () => {
               Explore FAQs <ArrowRight size={16} />
             </Link>
             <Link to="/chat" className="btn-secondary">
-              Ask Yaksha <ArrowUpRight size={16} />
+              Ask Yaksha-mini <ArrowUpRight size={16} />
             </Link>
           </div>
         </div>
@@ -465,7 +465,7 @@ export const LandingPage: React.FC = () => {
         <p className="lp-body reveal-up">
           Every candidate goes through a structured AI-led interview at{' '}
           <a href="https://samagama.in" className="lp-link">samagama.in</a>{' '}
-          with our interviewer agent, <strong>Yaksha</strong>. This is not a gimmick.
+          with our interviewer agent, <strong>Yaksha-mini</strong>. This is not a gimmick.
           The interview gives every applicant — irrespective of college brand, network,
           or geography — the same calibrated conversation about their work.
           Prof. Iyengar reads every transcript personally.
@@ -561,7 +561,7 @@ export const LandingPage: React.FC = () => {
             <div className="logistics-icon"><MessageSquare size={18} /></div>
             <div>
               <h4>During the Internship</h4>
-              <p>Discord for community, Zoom for meetings, GitHub for code, Yaksha chat for one-on-one queries.</p>
+              <p>Discord for community, Zoom for meetings, GitHub for code, Yaksha-mini chat for one-on-one queries.</p>
             </div>
           </li>
         </ul>
@@ -607,7 +607,7 @@ export const LandingPage: React.FC = () => {
           </li>
           <li className="step-item reveal-up">
             <div className="step-number">3</div>
-            <p>Tell Yaksha you want to opt in to VINS, in the exact phrase shown on the panel.</p>
+            <p>Tell Yaksha-mini you want to opt in to VINS, in the exact phrase shown on the panel.</p>
           </li>
           <li className="step-item reveal-up">
             <div className="step-number">4</div>
@@ -622,14 +622,14 @@ export const LandingPage: React.FC = () => {
         <div className="reveal-up" style={{ marginTop: '56px', textAlign: 'center' }}>
           <p className="lp-body lp-body--center" style={{ marginBottom: '24px' }}>
             If you have a question this page doesn't answer, the FAQ covers most of it.
-            Otherwise, log in at samagama.in and ask Yaksha.
+            Otherwise, log in at samagama.in and ask Yaksha-mini.
           </p>
           <div className="hero-actions">
             <Link to="/faq" className="btn-primary">
               Browse the FAQ <ArrowRight size={16} />
             </Link>
             <Link to="/chat" className="btn-secondary">
-              Ask Yaksha <ArrowUpRight size={16} />
+              Ask Yaksha-mini <ArrowUpRight size={16} />
             </Link>
           </div>
         </div>

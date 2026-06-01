@@ -157,9 +157,6 @@ export const OtpVerification: React.FC<OtpVerificationProps> = ({
           </div>
         )}
 
-        <div className="otp-test-helper">
-          💡 For testing, use the mock code: <strong>123456</strong>
-        </div>
 
         <button 
           type="submit" 

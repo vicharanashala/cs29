@@ -5,6 +5,7 @@ import {
   PanelLeftClose, PanelLeft
 } from 'lucide-react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 interface FaqRef {
   _id: string;
@@ -42,7 +43,7 @@ const stripHtml = (html: string): string => html.replace(/<[^>]*>/g, '').trim();
 const getTime = () =>
   new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-const INITIAL_MESSAGE_TEXT = "Hello! I'm <strong>Yaksha</strong>, your AI mentor for the Vicharanashala Internship. I can help you with NOC queries, offer letters, programme details, coursework doubts, and technical guidance. How can I help you today?";
+const INITIAL_MESSAGE_TEXT = "Hello! I'm <strong>Yaksha-mini</strong>, your AI mentor for the Vicharanashala Internship. I can help you with NOC queries, offer letters, programme details, coursework doubts, and technical guidance. How can I help you today?";
 
 const DEFAULT_SUGGESTIONS = [
   { icon: HelpCircle, text: "What is the NOC process?", category: "Logistics" },
@@ -52,17 +53,29 @@ const DEFAULT_SUGGESTIONS = [
 ];
 
 export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
+  const { isAuthenticated, user } = useAuth();
   const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [allowScroll, setAllowScroll] = useState(false);
+
+  const storageKey = user?.email ? `yaksha_chat_sessions_${user.email}` : 'yaksha_chat_sessions_guest';
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAllowScroll(true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
   const [currentSessionId, setCurrentSessionId] = useState<string>('');
   const [inputValue, setInputValue] = useState<string>('');
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [isListening, setIsListening] = useState(false);
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
   const [voiceTranscript, setVoiceTranscript] = useState('');
+  const [voiceError, setVoiceError] = useState<string | null>(null);
   const [voiceSupported] = useState(() => !!(
     (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
   ));
-  const [continuousListening, setContinuousListening] = useState(false);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editTitleText, setEditTitleText] = useState('');
@@ -75,7 +88,7 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
 
   // Load chat sessions from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('yaksha_chat_sessions');
+    const saved = localStorage.getItem(storageKey);
     if (saved) {
       try {
         const parsed = JSON.parse(saved) as ChatSession[];
@@ -98,13 +111,17 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
     };
     setSessions([initialSession]);
     setCurrentSessionId(initialSession.id);
-    localStorage.setItem('yaksha_chat_sessions', JSON.stringify([initialSession]));
-  }, []);
+    if (isAuthenticated) {
+      localStorage.setItem(storageKey, JSON.stringify([initialSession]));
+    }
+  }, [storageKey, isAuthenticated]);
 
   // Sync sessions to localStorage
   const saveSessions = (updated: ChatSession[]) => {
     setSessions(updated);
-    localStorage.setItem('yaksha_chat_sessions', JSON.stringify(updated));
+    if (isAuthenticated) {
+      localStorage.setItem(storageKey, JSON.stringify(updated));
+    }
   };
 
   // Get active session
@@ -114,8 +131,9 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
 
   // Scroll to bottom on message updates
   useEffect(() => {
+    if (!allowScroll) return;
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [activeSession?.messages, isTyping]);
+  }, [activeSession?.messages, isTyping, allowScroll]);
 
   // Cleanup Text-To-Speech on unmount
   useEffect(() => {
@@ -147,34 +165,83 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
         setVoiceTranscript(currentText);
       };
 
-      recognition.onerror = () => setIsListening(false);
-      recognition.onend = () => setIsListening(false);
+      let restartTimeout: ReturnType<typeof setTimeout> | null = null;
+
+      const startListening = () => {
+        if (!recognitionRef.current) return;
+        try {
+          recognitionRef.current.start();
+          setIsListening(true);
+          setVoiceError(null);
+        } catch (e) {
+          console.error('Speech recognition start failed:', e);
+          setVoiceError('Could not start microphone. Please allow microphone access.');
+          setIsListening(false);
+          setIsVoiceModalOpen(false);
+        }
+      };
+
+      // onerror: show user-friendly message, but keep modal open for retry
+      recognition.onerror = (event: any) => {
+        if (restartTimeout) clearTimeout(restartTimeout);
+        let errorMessage: string;
+        switch (event.error) {
+          case 'not-allowed':
+            errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings and reload the page.';
+            break;
+          case 'no-speech':
+            errorMessage = 'No speech detected. Please speak clearly and try again.';
+            break;
+          case 'network':
+            errorMessage = 'Speech service unavailable. Check your internet or try again in a moment.';
+            break;
+          case 'aborted':
+            // User cancelled — no error message needed
+            return;
+          default:
+            errorMessage = 'Microphone error. Please try again.';
+        }
+        setVoiceError(errorMessage);
+        setIsListening(false);
+        // Keep modal open so user can retry
+      };
+
+      // onend: always auto-restart while modal is open (continuous listening)
+      recognition.onend = () => {
+        if (isVoiceModalOpen) {
+          restartTimeout = setTimeout(startListening, 300);
+        } else {
+          setIsListening(false);
+        }
+      };
       recognitionRef.current = recognition;
     }
   }, []);
 
-  const openVoiceModal = () => {
+  const openVoiceModal = async () => {
     if (!voiceSupported) return;
     setVoiceTranscript('');
+    setVoiceError(null);
     setIsVoiceModalOpen(true);
-    setIsListening(true);
+    setIsListening(false); // Don't set true until recognition actually starts
+
     if (recognitionRef.current) {
-      recognitionRef.current.continuous = continuousListening;
-    }
-    setTimeout(() => {
-      if (recognitionRef.current) {
-        try {
-          recognitionRef.current.start();
-        } catch (e) {
-          console.error("Speech recognition start failed:", e);
-        }
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (e) {
+        console.error('Speech recognition start failed:', e);
+        setVoiceError('Could not start microphone. Please allow microphone access and try again.');
+        setIsListening(false);
+        setIsVoiceModalOpen(false);
       }
-    }, 100);
+    }
   };
 
   const closeVoiceModalCancel = () => {
     setIsVoiceModalOpen(false);
     setIsListening(false);
+    setVoiceError(null);
     if (recognitionRef.current) {
       try { recognitionRef.current.abort(); } catch (_) {}
     }
@@ -273,7 +340,7 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
 
         const botResponse: Message = {
           text: isServerError
-            ? 'Yaksha is receiving too many requests right now. Please wait a moment and try again.'
+            ? 'Yaksha-mini is receiving too many requests right now. Please wait a moment and try again.'
             : 'Sorry, I could not connect to the server. Please try again.',
           sender: 'bot',
           time: getTime(),
@@ -435,7 +502,7 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
             <div className="yaksha-logo-badge">Y</div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                Yaksha <Sparkles size={14} color={"var(--accent)"} />
+                Yaksha-mini <Sparkles size={14} color={"var(--accent)"} />
               </div>
               <div style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span className="yaksha-online-dot" />
@@ -452,25 +519,61 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
         {/* Messages Area */}
         <div className="yaksha-messages" style={{ flex: 1, overflowY: 'auto' }}>
           {activeSession && activeSession.messages.length === 1 && (
-            <div className="yaksha-welcome">
-              <div className="yaksha-welcome-icon">
-                <Sparkles size={32} color="var(--accent)" />
-              </div>
-              <h2>Welcome to Yaksha</h2>
-              <p>Your AI mentor for the Vicharanashala Internship Programme. Ask me anything!</p>
+            <div className="yaksha-welcome-area" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 24px', textAlign: 'center', flex: 1 }}>
+              <div className="yaksha-welcome-card" style={{ maxWidth: '640px', width: '100%' }}>
+                <div className="yaksha-welcome-logo" style={{ width: '64px', height: '64px', borderRadius: '18px', background: 'var(--accent-glow-strong)', color: 'var(--accent)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', boxShadow: '0 8px 30px var(--accent-glow)' }}>
+                  <Sparkles size={28} color="var(--accent)" />
+                </div>
+                <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '8px' }}>Welcome to Yaksha-mini</h2>
+                <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '32px', maxWidth: '480px', margin: '0 auto 32px', lineHeight: 1.5 }}>
+                  Your AI mentor for the Vicharanashala Internship Programme. Ask me anything!
+                </p>
 
-              <div className="yaksha-prompts-grid">
-                {DEFAULT_SUGGESTIONS.map((prompt, i) => (
-                  <button
-                    key={i}
-                    className="yaksha-prompt-card"
-                    onClick={() => handleSend(undefined, prompt.text)}
-                  >
-                    <prompt.icon size={18} color="var(--accent)" />
-                    <span className="yaksha-prompt-card-text">{prompt.text}</span>
-                    <span className="yaksha-prompt-category">{prompt.category}</span>
-                  </button>
-                ))}
+                <div className="yaksha-prompts-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
+                  {DEFAULT_SUGGESTIONS.map((prompt, i) => (
+                    <button
+                      key={i}
+                      className="yaksha-prompt-card"
+                      onClick={() => handleSend(undefined, prompt.text)}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        alignItems: 'flex-start',
+                        padding: '16px 20px',
+                        background: 'var(--bg-card)',
+                        border: '1px solid var(--border)',
+                        borderRadius: '12px',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        width: '100%',
+                        boxSizing: 'border-box'
+                      }}
+                      onMouseOver={e => {
+                        e.currentTarget.style.borderColor = 'var(--border-active)';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.background = 'var(--bg-card-hover)';
+                      }}
+                      onMouseOut={e => {
+                        e.currentTarget.style.borderColor = 'var(--border)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.background = 'var(--bg-card)';
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent-glow)', padding: '6px', borderRadius: '6px', color: 'var(--accent)' }}>
+                          <prompt.icon size={15} />
+                        </div>
+                        <span style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--accent)' }}>
+                          {prompt.category}
+                        </span>
+                      </div>
+                      <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-primary)', textAlign: 'left', lineHeight: 1.4 }}>
+                        {prompt.text}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -485,7 +588,7 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
                   {msg.sender === 'bot' && (
                     <div className="yaksha-msg-avatar">Y</div>
                   )}
-                  <div style={{ maxWidth: '80%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ width: '100%', maxWidth: '85%', display: 'flex', flexDirection: 'column', alignItems: msg.sender === 'user' ? 'flex-end' : 'flex-start' }}>
                     {msg.text && (
                       <div
                         className="yaksha-bubble"
@@ -629,67 +732,61 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
 
       {/* Voice Modal */}
       {isVoiceModalOpen && (
-        <div className="yaksha-voice-popup-overlay" onClick={closeVoiceModalCancel}>
+        <div className="yaksha-voice-overlay" onClick={closeVoiceModalCancel}>
           <div className="yaksha-voice-popup" onClick={(e) => e.stopPropagation()}>
             <div className="yaksha-voice-popup-header">
-              <h3>Voice Command</h3>
+              <h3 className="yaksha-voice-popup-title">Voice Command</h3>
               <button className="yaksha-close-btn" onClick={closeVoiceModalCancel}>✕</button>
             </div>
 
-            {/* Recording status with pulsing indicator */}
-            <div className={`yaksha-voice-status ${isListening ? 'listening' : ''}`}>
-              <div className="yaksha-voice-wave" style={{ position: 'relative' }}>
-                {isListening ? (
-                  <>
-                    <div className="wave-bars"><span/><span/><span/><span/><span/></div>
-                    <span style={{
-                      position: 'absolute', top: '-6px', right: '-6px',
-                      width: '10px', height: '10px', borderRadius: '50%',
-                      background: '#ff3b30', boxShadow: '0 0 0 0 rgba(255,59,48,0.4)',
-                      animation: 'pulse 1s ease-in-out infinite',
-                    }} />
-                  </>
-                ) : (
-                  <Mic size={32} color="var(--accent)" />
-                )}
+            {/* Pulsar mic indicator */}
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '24px 0 20px' }}>
+              <div className={`yaksha-voice-pulsar-ring ${isListening ? 'active' : ''}`}>
+                <div className="yaksha-voice-pulsar-ring-inner">
+                  {isListening ? (
+                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                      <div className="wave-bar bar-1" /><div className="wave-bar bar-2" /><div className="wave-bar bar-3" />
+                    </div>
+                  ) : (
+                    <Mic size={26} color="var(--accent)" />
+                  )}
+                </div>
               </div>
-              <p style={{ fontWeight: isListening ? 700 : 400 }}>
-                {isListening ? '● Recording…' : 'Ready to listen'}
-              </p>
             </div>
+            {/* Status text */}
+            <p className="yaksha-voice-popup-status" style={voiceError ? { color: '#f59e0b' } : {}}>
+              {voiceError
+                ? voiceError
+                : isListening
+                ? '● Recording…'
+                : voiceTranscript
+                ? '✓ Speech detected'
+                : 'Tap the mic and ask your question'}
+            </p>
 
             {/* Real-time transcript */}
             <div className="yaksha-voice-transcript-box">
-              <p className="yaksha-voice-transcript-text" style={{ minHeight: '48px' }}>
-                {voiceTranscript || <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Your words will appear here in real-time…</span>}
-              </p>
+              {voiceTranscript ? (
+                <p className="yaksha-voice-transcript-text">{voiceTranscript}</p>
+              ) : (
+                <p className="yaksha-voice-transcript-placeholder">Your words will appear here in real-time…</p>
+              )}
             </div>
 
-            {/* Continuous listening toggle */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderTop: '1px solid var(--border)', marginTop: '4px' }}>
-              <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Continuous listening</span>
+            {/* Stacked action buttons below transcript */}
+            <div className="w-full flex flex-col gap-4 mt-5 px-1">
               <button
-                type="button"
-                onClick={() => setContinuousListening((v) => !v)}
-                style={{
-                  width: '36px', height: '20px', borderRadius: '10px', border: 'none',
-                  background: continuousListening ? 'var(--accent)' : 'var(--border)',
-                  cursor: 'pointer', position: 'relative', transition: 'background 0.2s',
-                }}
+                className="w-full block text-center py-3.5 bg-amber-50 hover:bg-amber-100 text-amber-500 font-bold rounded-2xl border border-amber-200 transition-all duration-200 text-base cursor-pointer shadow-sm active:scale-[0.99]"
+                onClick={closeVoiceModalDone}
+                disabled={!voiceTranscript.trim()}
               >
-                <span style={{
-                  position: 'absolute', top: '3px',
-                  left: continuousListening ? '18px' : '3px',
-                  width: '14px', height: '14px', borderRadius: '50%',
-                  background: 'white', transition: 'left 0.2s',
-                }} />
-              </button>
-            </div>
-
-            <div className="yaksha-voice-popup-actions">
-              <button className="voice-btn-cancel" onClick={closeVoiceModalCancel}>Cancel</button>
-              <button className="voice-btn-done" onClick={closeVoiceModalDone} disabled={!voiceTranscript.trim()}>
                 Use Text
+              </button>
+              <button
+                className="w-full block text-center py-3.5 bg-amber-50/70 hover:bg-amber-100 text-amber-500/80 font-bold rounded-2xl border border-amber-200/60 transition-all duration-200 text-base cursor-pointer shadow-sm active:scale-[0.99]"
+                onClick={closeVoiceModalCancel}
+              >
+                Cancel
               </button>
             </div>
           </div>

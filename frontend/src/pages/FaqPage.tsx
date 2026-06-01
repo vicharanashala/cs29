@@ -144,7 +144,7 @@ export const FaqPage: React.FC = () => {
       else if (cat.startsWith('Work')) label = 'Work & Mentorship';
       else if (cat.startsWith('Rosetta')) label = 'Rosetta Journal';
       else if (cat.startsWith('ViBe')) label = 'ViBe Platform';
-      else if (cat.startsWith('Yaksha')) label = 'Yaksha Chat';
+      else if (cat.startsWith('Yaksha')) label = 'Yaksha-mini Chat';
       else if (cat.startsWith('Interviews')) label = 'Interviews';
       else if (cat.startsWith('Code of Conduct')) label = 'Code of Conduct';
       else if (cat.startsWith('Team')) label = 'Team Formation';
@@ -193,6 +193,32 @@ export const FaqPage: React.FC = () => {
     }, 100);
   };
 
+  const { title, subtitle } = useMemo(() => {
+    switch (activeTab) {
+      case 'most-asked':
+        return {
+          title: 'Most asked FAQs',
+          subtitle: 'The most commonly queried topics and solutions curated from all intern interactions.',
+        };
+      case 'latest':
+        return {
+          title: 'Latest FAQs',
+          subtitle: 'Stay up-to-date with the recently added and revised answers for the internship.',
+        };
+      case 'bookmarked':
+        return {
+          title: 'Your Bookmarks',
+          subtitle: 'Your handpicked selection of key guidelines, schedules, and helpful guidelines.',
+        };
+      case 'all':
+      default:
+        return {
+          title: t.faqPage.title,
+          subtitle: 'Everything you need to know about the Vicharanashala Internship Programme (VINS). Search or browse by category below.',
+        };
+    }
+  }, [activeTab, t]);
+
   return (
     <>
       <section className="hero" id="hero">
@@ -232,10 +258,9 @@ export const FaqPage: React.FC = () => {
             )}
           </div>
 
-          <h1 className="hero-title" style={{ color: 'var(--accent)' }}>{t.faqPage.title}</h1>
+          <h1 className="hero-title" style={{ color: 'var(--accent)' }}>{title}</h1>
           <p className="hero-subtitle">
-            Everything you need to know about the Vicharanashala Internship Programme (VINS).
-            Search or browse by category below.
+            {subtitle}
           </p>
           <div className="search-container" style={{ marginTop: '24px', maxWidth: '600px', margin: '24px auto 0' }}>
             <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

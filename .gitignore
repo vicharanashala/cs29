@@ -1,3 +1,16 @@
 node_modules/
 .env
 dist/
+
+# Local AI Sub-Agent Backup Files
+*.BAK
+*.BAK_M4
+*.BAK_P1
+*.css.BAK
+.DS_Store
+backend/.DS_Store
+
+.DS_Store
+**/.DS_Store
+*.BAK
+*.BAK_*

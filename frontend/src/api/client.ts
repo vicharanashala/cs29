@@ -6,23 +6,36 @@ const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-// Attach a fresh Firebase ID token to every request (auto-refreshed by Firebase SDK)
+// Attach auth to every request:
+//  - Firebase token if a Firebase user is signed in
+//  - Plain Authorization: <email> header if logged in via local mock (no Firebase)
 apiClient.interceptors.request.use(async (config) => {
-  const firebaseUser = auth.currentUser;
-  if (firebaseUser) {
-    const token = await firebaseUser.getIdToken();
+  if (auth?.currentUser) {
+    const token = await auth.currentUser.getIdToken();
     config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    // Prototype local login: carry the email so the backend guard can recognise it
+    const storedUser = localStorage.getItem('auth_user');
+    if (storedUser) {
+      try {
+        const { email } = JSON.parse(storedUser);
+        if (email) {
+          config.headers.Authorization = email as string;
+          config.headers['x-user-email'] = email as string;
+        }
+      } catch (_) {}
+    }
   }
   return config;
 });
 
-// On 401 sign out and redirect to login
+// On 401 clear local auth state and redirect to login
 apiClient.interceptors.response.use(
   (res) => res,
   async (error) => {
     if (error.response?.status === 401) {
-      await signOut(auth);
-      localStorage.removeItem('user');
+      localStorage.removeItem('auth_user');
+      if (auth) await signOut(auth);
       window.location.href = '/login';
     }
     return Promise.reject(error);

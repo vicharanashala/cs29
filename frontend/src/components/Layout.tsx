@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useRouterState } from '@tanstack/react-router';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { ArrowUp } from 'lucide-react';
 
 export const Layout: React.FC = () => {
+  const router = useRouterState();
+  const currentPath = router.location.pathname;
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [mousePos, setMousePos] = useState({ x: -400, y: -400 });
 
@@ -35,7 +37,7 @@ export const Layout: React.FC = () => {
       <main style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
         <Outlet />
       </main>
-      <Footer />
+      {currentPath !== '/chat' && <Footer />}
       
       <button 
         className={`back-to-top ${showBackToTop ? 'visible' : ''}`}

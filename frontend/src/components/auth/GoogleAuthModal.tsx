@@ -16,22 +16,15 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  // Guard against StrictMode double-fire
   const firedRef = useRef(false);
 
-  useEffect(() => {
-    if (!isOpen) {
-      firedRef.current = false;
-      setError('');
+  const startGoogleFlow = () => {
+    if (!auth) {
+      setError('Firebase is not configured. Please contact support.');
       return;
     }
-    if (firedRef.current) return;
-    firedRef.current = true;
-
     setLoading(true);
     setError('');
-
-    // googleProvider already has prompt: 'select_account' set in firebase.ts
     signInWithPopup(auth, googleProvider)
       .then((result) => {
         const email = result.user.email ?? '';
@@ -45,7 +38,6 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
           code === 'auth/popup-closed-by-user' ||
           code === 'auth/cancelled-popup-request'
         ) {
-          // User dismissed the popup — just close quietly
           onClose();
         } else {
           setError(
@@ -58,7 +50,18 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
       .finally(() => {
         setLoading(false);
       });
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+  };
+
+  useEffect(() => {
+    if (!isOpen) {
+      firedRef.current = false;
+      setError('');
+      return;
+    }
+    if (firedRef.current) return;
+    firedRef.current = true;
+    startGoogleFlow();
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -101,16 +104,7 @@ export const GoogleAuthModal: React.FC<GoogleAuthModalProps> = ({
               onClick={() => {
                 firedRef.current = false;
                 setError('');
-                setLoading(true);
-                signInWithPopup(auth, googleProvider)
-                  .then((result) => {
-                    const email = result.user.email ?? '';
-                    const name = result.user.displayName ?? email.split('@')[0];
-                    onSelectAccount(email, name);
-                    onClose();
-                  })
-                  .catch(() => setError('Google sign-in failed. Please try again.'))
-                  .finally(() => setLoading(false));
+                startGoogleFlow();
               }}
             >
               Try again

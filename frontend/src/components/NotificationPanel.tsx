@@ -1,11 +1,12 @@
 import React from 'react';
 import { Bell, CheckCheck, MessageSquare, CheckCircle2, Megaphone } from 'lucide-react';
+import { useNavigate } from '@tanstack/react-router';
 
 export interface NotificationItem {
   _id: string;
   title: string;
   body: string;
-  type: 'issue_resolved' | 'reply_received' | 'answer_approved' | 'announcement';
+  type: 'issue_resolved' | 'reply_received' | 'answer_approved' | 'announcement' | 'new_faq' | 'new_query';
   issueId?: string;
   read: boolean;
   createdAt: string;
@@ -38,11 +39,12 @@ const timeAgo = (iso: string): string => {
 export const NotificationPanel: React.FC<NotificationPanelProps> = ({
   notifications, onMarkRead, onMarkAllRead, onClose,
 }) => {
+  const navigate = useNavigate();
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <div style={{
-      position: 'absolute', top: '100%', right: 0, paddingTop: '12px', zIndex: 200,
+      position: 'absolute', top: '100%', left: 0, paddingTop: '12px', zIndex: 200,
     }}>
       <div style={{
         width: '320px', background: 'var(--bg-secondary)', border: '1px solid var(--border)',
@@ -79,7 +81,21 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
             notifications.map((n) => (
               <div
                 key={n._id}
-                onClick={() => { if (!n.read) onMarkRead(n._id); onClose(); }}
+                onClick={() => {
+                  if (!n.read) onMarkRead(n._id);
+                  onClose();
+                  const titleLower = n.title.toLowerCase();
+                  const bodyLower = n.body.toLowerCase();
+                  if (n.type === 'issue_resolved' || n.type === 'reply_received' || titleLower.includes('reply') || titleLower.includes('resolved')) {
+                    navigate({ to: '/track-issues' });
+                  } else if (n.type === 'new_faq' || titleLower.includes('new faq')) {
+                    navigate({ to: '/faq' });
+                  } else if (n.type === 'new_query' || titleLower.includes('new query') || titleLower.includes('query to resolve')) {
+                    navigate({ to: '/resolve-question' });
+                  } else if (titleLower.includes('profile') || bodyLower.includes('profile')) {
+                    navigate({ to: '/profile' });
+                  }
+                }}
                 style={{
                   display: 'flex', alignItems: 'flex-start', gap: '10px',
                   padding: '12px 16px', cursor: 'pointer',

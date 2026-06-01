@@ -53,8 +53,29 @@ export const ProfilePage: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleCvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      alert('Only PDF files are accepted for CV upload.');
+      return;
+    }
+    updateProfile({ cvFileName: file.name });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Validate that all fields are filled and compulsory
+    const requiredFields: (keyof UserProfile)[] = [
+      'firstName', 'lastName', 'alternateEmail', 'mobile',
+      'collegeName', 'collegeAddress', 'collegeWebsite',
+      'departmentName', 'departmentWebpage', 'programme', 'branch', 'gpa'
+    ];
+    const hasEmpty = requiredFields.some((field) => !formData[field]?.toString().trim());
+    if (hasEmpty) {
+      alert('All fields in the profile section are compulsory. Please fill out all fields.');
+      return;
+    }
     updateProfile(formData);
     setIsEditing(false);
     setIsSaved(true);
@@ -169,6 +190,24 @@ export const ProfilePage: React.FC = () => {
             ) : (
               <div className="profile-doc-empty">No CV uploaded</div>
             )}
+            <div style={{ marginTop: '12px' }}>
+              <input
+                type="file"
+                id="cv-upload-input"
+                accept=".pdf"
+                style={{ display: 'none' }}
+                onChange={handleCvUpload}
+              />
+              <button
+                type="button"
+                onClick={() => document.getElementById('cv-upload-input')?.click()}
+                className="profile-edit-btn"
+                style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '8px' }}
+              >
+                <FileText size={14} />
+                {user.cvFileName ? 'Change CV' : 'Upload CV'}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -188,19 +227,19 @@ export const ProfilePage: React.FC = () => {
                 <div className="profile-form-grid">
                   <div className="form-group">
                     <label className="form-label" htmlFor="firstName">First Name</label>
-                    <input className="form-input" id="firstName" name="firstName" type="text" value={formData.firstName} onChange={handleChange} placeholder="John" />
+                    <input required className="form-input" id="firstName" name="firstName" type="text" value={formData.firstName} onChange={handleChange} placeholder="John" />
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="lastName">Last Name</label>
-                    <input className="form-input" id="lastName" name="lastName" type="text" value={formData.lastName} onChange={handleChange} placeholder="Doe" />
+                    <input required className="form-input" id="lastName" name="lastName" type="text" value={formData.lastName} onChange={handleChange} placeholder="Doe" />
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="alternateEmail">Alternate Email</label>
-                    <input className="form-input" id="alternateEmail" name="alternateEmail" type="email" value={formData.alternateEmail} onChange={handleChange} placeholder="alt@example.com" />
+                    <input required className="form-input" id="alternateEmail" name="alternateEmail" type="email" value={formData.alternateEmail} onChange={handleChange} placeholder="alt@example.com" />
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="mobile">Mobile Phone</label>
-                    <input className="form-input" id="mobile" name="mobile" type="tel" value={formData.mobile} onChange={handleChange} placeholder="+91 XXXXX XXXXX" />
+                    <input required className="form-input" id="mobile" name="mobile" type="tel" value={formData.mobile} onChange={handleChange} placeholder="+91 XXXXX XXXXX" />
                   </div>
                 </div>
               </div>
@@ -210,23 +249,23 @@ export const ProfilePage: React.FC = () => {
                 <div className="profile-form-grid">
                   <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                     <label className="form-label" htmlFor="collegeName">College Name</label>
-                    <input className="form-input" id="collegeName" name="collegeName" type="text" value={formData.collegeName} onChange={handleChange} placeholder="e.g. Indian Institute of Technology" />
+                    <input required className="form-input" id="collegeName" name="collegeName" type="text" value={formData.collegeName} onChange={handleChange} placeholder="e.g. Indian Institute of Technology" />
                   </div>
                   <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                     <label className="form-label" htmlFor="collegeAddress">Full Address</label>
-                    <input className="form-input" id="collegeAddress" name="collegeAddress" type="text" value={formData.collegeAddress} onChange={handleChange} placeholder="Street, City, State, ZIP" />
+                    <input required className="form-input" id="collegeAddress" name="collegeAddress" type="text" value={formData.collegeAddress} onChange={handleChange} placeholder="Street, City, State, ZIP" />
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="collegeWebsite">College Website</label>
-                    <input className="form-input" id="collegeWebsite" name="collegeWebsite" type="url" value={formData.collegeWebsite} onChange={handleChange} placeholder="https://..." />
+                    <input required className="form-input" id="collegeWebsite" name="collegeWebsite" type="url" value={formData.collegeWebsite} onChange={handleChange} placeholder="https://..." />
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="departmentName">Department</label>
-                    <input className="form-input" id="departmentName" name="departmentName" type="text" value={formData.departmentName} onChange={handleChange} placeholder="e.g. Computer Science" />
+                    <input required className="form-input" id="departmentName" name="departmentName" type="text" value={formData.departmentName} onChange={handleChange} placeholder="e.g. Computer Science" />
                   </div>
                   <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                     <label className="form-label" htmlFor="departmentWebpage">Department Webpage</label>
-                    <input className="form-input" id="departmentWebpage" name="departmentWebpage" type="url" value={formData.departmentWebpage} onChange={handleChange} placeholder="https://..." />
+                    <input required className="form-input" id="departmentWebpage" name="departmentWebpage" type="url" value={formData.departmentWebpage} onChange={handleChange} placeholder="https://..." />
                   </div>
                 </div>
               </div>
@@ -236,15 +275,15 @@ export const ProfilePage: React.FC = () => {
                 <div className="profile-form-grid">
                   <div className="form-group">
                     <label className="form-label" htmlFor="programme">Programme</label>
-                    <input className="form-input" id="programme" name="programme" type="text" value={formData.programme} onChange={handleChange} placeholder="B.Tech, M.Tech, etc." />
+                    <input required className="form-input" id="programme" name="programme" type="text" value={formData.programme} onChange={handleChange} placeholder="B.Tech, M.Tech, etc." />
                   </div>
                   <div className="form-group">
                     <label className="form-label" htmlFor="branch">Branch</label>
-                    <input className="form-input" id="branch" name="branch" type="text" value={formData.branch} onChange={handleChange} placeholder="CS/Data Science/Math etc" />
+                    <input required className="form-input" id="branch" name="branch" type="text" value={formData.branch} onChange={handleChange} placeholder="CS/Data Science/Math etc" />
                   </div>
                   <div className="form-group" style={{ gridColumn: '1 / -1' }}>
                     <label className="form-label" htmlFor="gpa">GPA / Percentage</label>
-                    <input className="form-input" id="gpa" name="gpa" type="text" value={formData.gpa} onChange={handleChange} placeholder="e.g. 8.5 CGPA" />
+                    <input required className="form-input" id="gpa" name="gpa" type="text" value={formData.gpa} onChange={handleChange} placeholder="e.g. 8.5 CGPA" />
                   </div>
                 </div>
               </div>

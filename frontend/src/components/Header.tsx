@@ -6,6 +6,7 @@ import { LogOut, User as UserIcon, ChevronDown, Sun, Moon, Bell } from 'lucide-r
 import { NotificationPanel } from './NotificationPanel';
 import type { NotificationItem } from './NotificationPanel';
 import { useLanguage } from '../context/LanguageContext';
+import logoImg from '../assets/logo.png';
 
 export const Header: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,7 +17,7 @@ export const Header: React.FC = () => {
 
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { language, t, toggleLanguage } = useLanguage();
+  const { t } = useLanguage();
   const router = useRouterState();
   const currentPath = router.location.pathname;
 
@@ -79,9 +80,9 @@ export const Header: React.FC = () => {
   return (
     <header className={`site-header ${isScrolled ? 'scrolled' : ''}`} id="site-header">
       <div className="header-inner">
-        <Link to="/" className="logo" onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-          <span className="logo-mark">V</span>
-          <span className="logo-text">Vicharanashala</span>
+        <Link to="/" className="logo" onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <img src={logoImg} alt="Vicharanashala Logo" style={{ height: '32px', width: 'auto', objectFit: 'contain' }} />
+          <span style={{ fontSize: '16px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '0.04em' }}>VICHARANASHALA</span>
         </Link>
         <nav className="site-nav">
           <Link to="/" className={currentPath === '/' ? 'active' : ''}>{t.nav.overview}</Link>
@@ -122,35 +123,14 @@ export const Header: React.FC = () => {
             {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
-          {/* Language Toggle */}
-          <button
-            onClick={toggleLanguage}
-            title={`Switch to ${language === 'en' ? 'Hindi' : 'English'}`}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              height: '34px', padding: '0 10px', borderRadius: '17px',
-              background: 'var(--bg-card)', border: '1px solid var(--border)',
-              cursor: 'pointer', color: 'var(--text-secondary)',
-              fontSize: '12px', fontWeight: 700, letterSpacing: '0.02em',
-              transition: 'all 0.25s ease',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = 'var(--accent-glow)';
-              e.currentTarget.style.color = 'var(--accent)';
-              e.currentTarget.style.borderColor = 'var(--border-active)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = 'var(--bg-card)';
-              e.currentTarget.style.color = 'var(--text-secondary)';
-              e.currentTarget.style.borderColor = 'var(--border)';
-            }}
-          >
-            {language === 'en' ? 'हि' : 'EN'}
-          </button>
-
           {/* Notification Bell (authenticated only) */}
           {isAuthenticated && (
-            <div ref={notifRef} style={{ position: 'relative' }}>
+            <div 
+              ref={notifRef} 
+              style={{ position: 'relative' }}
+              onMouseEnter={() => setIsNotifOpen(true)}
+              onMouseLeave={() => setIsNotifOpen(false)}
+            >
               <button
                 onClick={() => setIsNotifOpen((v) => !v)}
                 title="Notifications"
@@ -225,31 +205,32 @@ export const Header: React.FC = () => {
                     flexDirection: 'column',
                     gap: '4px',
                   }}>
-                  <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border)', marginBottom: '4px' }}>
-                    <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{user?.name}</div>
-                    <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user?.email}</div>
-                    {isAdmin && <span style={{ display: 'inline-block', marginTop: '4px', fontSize: '10px', padding: '2px 6px', background: 'var(--accent-glow)', color: 'var(--accent)', borderRadius: '10px' }}>Admin</span>}
-                  </div>
-                  {!isAdmin ? (
-                    <>
-                      <Link to="/profile" className="dropdown-item">Profile</Link>
-                      <Link to="/raise-issue" className="dropdown-item">Raise a new issue</Link>
-                      <Link to="/track-issues" className="dropdown-item">Track my issues</Link>
-                      <Link to="/resolve-question" className="dropdown-item">Resolve a question</Link>
-                    </>
-                  ) : (
-                    <>
-                      <Link to="/admin" className="dropdown-item" style={{ color: 'var(--accent)', fontWeight: 600 }}>Admin Dashboard</Link>
-                    </>
-                  )}
-                  <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0' }}></div>
-                  <button
-                    onClick={logout}
-                    className="dropdown-item dropdown-item--danger"
-                  >
-                    <LogOut size={14} />
-                    Logout
-                  </button>
+                    <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border)', marginBottom: '4px' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>{user?.name}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{user?.email}</div>
+                      {isAdmin && <span style={{ display: 'inline-block', marginTop: '4px', fontSize: '10px', padding: '2px 6px', background: 'var(--accent-glow)', color: 'var(--accent)', borderRadius: '10px' }}>Admin</span>}
+                    </div>
+                    {!isAdmin ? (
+                      <>
+                        <Link to="/profile" className="dropdown-item">Profile</Link>
+                        <Link to="/leaderboard" className="dropdown-item">SP Leaderboard</Link>
+                        <Link to="/raise-issue" className="dropdown-item">Raise a new issue</Link>
+                        <Link to="/track-issues" className="dropdown-item">Track my issues</Link>
+                        <Link to="/resolve-question" className="dropdown-item">Resolve a question</Link>
+                      </>
+                    ) : (
+                      <>
+                        <Link to="/admin" className="dropdown-item" style={{ color: 'var(--accent)', fontWeight: 600 }}>Admin Dashboard</Link>
+                      </>
+                    )}
+                    <div style={{ height: '1px', background: 'var(--border)', margin: '4px 0' }}></div>
+                    <button
+                      onClick={logout}
+                      className="dropdown-item dropdown-item--danger"
+                    >
+                      <LogOut size={14} />
+                      Logout
+                    </button>
                   </div>
                 </div>
               )}

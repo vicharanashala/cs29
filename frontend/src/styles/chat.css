@@ -327,6 +327,13 @@
   transform: translateY(-2px);
 }
 
+.yaksha-input-inner .yaksha-input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
 /* ── Voice button ── */
 .yaksha-voice-btn {
   display: flex;
@@ -441,6 +448,17 @@
   justify-content: center;
 }
 
+.yaksha-voice-pulsar-ring.active::before {
+  animation: pulse-ring 1s infinite ease-out;
+  border-color: #ff3b30;
+  opacity: 0.5;
+}
+
+.yaksha-voice-pulsar-ring.active {
+  background: rgba(255, 59, 48, 0.2);
+  box-shadow: 0 0 20px rgba(255, 59, 48, 0.4);
+}
+
 @keyframes pulse-ring {
   0% { transform: scale(0.85); opacity: 0.5; }
   50% { opacity: 0.2; }
@@ -459,6 +477,36 @@
   color: var(--accent);
   font-weight: 700;
   margin-bottom: 24px;
+}
+
+.yaksha-voice-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.yaksha-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.2s, background 0.2s;
+}
+
+.yaksha-close-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-input);
+}
+
+.yaksha-voice-transcript-placeholder {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 0;
 }
 
 /* Animated Sound Wave visualizer */

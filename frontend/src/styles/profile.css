@@ -265,9 +265,9 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .profile-info-empty {
@@ -280,6 +280,9 @@
   font-weight: 500;
   color: #2997ff;
   text-decoration: none;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .profile-info-link:hover {

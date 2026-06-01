@@ -2,7 +2,7 @@ export const en = {
   nav: {
     overview: 'Overview',
     faq: 'FAQ',
-    chat: 'Yaksha Chat',
+    chat: 'Yaksha-mini Chat',
     announcements: 'Announcements',
     login: 'Login',
   },
@@ -35,13 +35,13 @@ export const en = {
     inCategory: 'in',
   },
   chatPage: {
-    searchPlaceholder: 'Quick-search FAQs before asking Yaksha…',
+    searchPlaceholder: 'Quick-search FAQs before asking Yaksha-mini…',
   },
   landing: {
     heroTitle: 'Your Intern FAQ Hub',
     heroSubtitle: 'Powered by AI. Moderated by seniors. Built for the VINS community.',
     ctaFaq: 'Browse FAQs',
-    ctaChat: 'Ask Yaksha',
+    ctaChat: 'Ask Yaksha-mini',
     ctaRaise: 'Raise an Issue',
   },
 };

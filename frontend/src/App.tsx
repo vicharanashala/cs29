@@ -44,7 +44,7 @@ function App() {
   const [tocOpen, setTocOpen]           = useState<boolean>(false);
   const [activeTocSection, setActiveToc]= useState<string>('s-1');
   const [chatOpen, setChatOpen]         = useState<boolean>(false);
-  const [voicePageOpen, setVoicePageOpen] = useState<boolean>(false);
+
 
   // Auth state — initialise from localStorage for instant display, then sync with Firebase
   const [user, setUser] = useState<SyncedUser | null>(() => {
@@ -53,7 +53,9 @@ function App() {
   });
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (fbUser) => {
+    if (!auth) return;
+    const firebaseAuth = auth;
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (fbUser) => {
       if (fbUser) {
         // Fast path: use cached user object if already stored
         const stored = localStorage.getItem('user');
@@ -126,7 +128,7 @@ function App() {
       else if (cat.startsWith('Work'))       label = 'Work & Mentorship';
       else if (cat.startsWith('Rosetta'))    label = 'Rosetta Journal';
       else if (cat.startsWith('ViBe'))       label = 'ViBe Platform';
-      else if (cat.startsWith('Yaksha'))     label = 'Yaksha Chat';
+      else if (cat.startsWith('Yaksha'))     label = 'Yaksha-mini Chat';
       else if (cat.startsWith('Interviews')) label = 'Interviews';
       else if (cat.startsWith('Code of Conduct')) label = 'Code of Conduct';
       else if (cat.startsWith('Team'))       label = 'Team Formation';
@@ -184,10 +186,6 @@ function App() {
             <button className="nav-pill nav-pill--action" onClick={() => setActiveTab('resolve')}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
               Resolve Query
-            </button>
-            <button className="nav-pill nav-pill--accent" onClick={() => setVoicePageOpen(true)}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
-              Voice Chat
             </button>
             <span className="nav-pill-divider" />
             {user ? (
@@ -354,39 +352,6 @@ function App() {
           <YakshaChat isModal={true} onClose={() => setChatOpen(false)} />
         </div>
       </div>
-
-      {/* ─── VOICE CHAT FULL PAGE ─── */}
-      {voicePageOpen && (
-        <div className="voice-page">
-          <header className="voice-page-header">
-            <a href="#" className="logo" onClick={(e) => { e.preventDefault(); setVoicePageOpen(false); }}>
-              <span className="logo-mark">V</span>
-              <span className="logo-text">Vicharanashala</span>
-            </a>
-            <button className="voice-page-back" onClick={() => setVoicePageOpen(false)}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
-              Back to FAQ
-            </button>
-          </header>
-          <div className="voice-page-body">
-            <div className="voice-page-orb">
-              <div className="voice-page-orb-ring">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                  <line x1="12" y1="19" x2="12" y2="23" />
-                  <line x1="8" y1="23" x2="16" y2="23" />
-                </svg>
-              </div>
-              <span className="voice-page-pulse" />
-              <span className="voice-page-pulse voice-page-pulse--delayed" />
-            </div>
-            <h1 className="voice-page-title">Voice Chat with Yaksha</h1>
-            <p className="voice-page-subtitle">Tap the microphone and ask your question aloud.<br />Yaksha will listen and respond to your FAQ queries.</p>
-            <p className="voice-page-note">Powered by Web Speech API · Works best in Chrome</p>
-          </div>
-        </div>
-      )}
 
     </>
   );

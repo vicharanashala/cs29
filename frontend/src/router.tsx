@@ -12,6 +12,7 @@ import { TrackIssuesPage } from './pages/TrackIssuesPage';
 import { ResolveQuestionPage } from './pages/ResolveQuestionPage';
 import AdminPage from './pages/AdminPage';
 import { AnnouncementsPage } from './pages/AnnouncementsPage';
+import { LeaderboardPage } from './pages/LeaderboardPage';
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -83,6 +84,12 @@ const announcementsRoute = createRoute({
   component: AnnouncementsPage,
 });
 
+const leaderboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/leaderboard',
+  component: LeaderboardPage,
+});
+
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/admin',
@@ -101,10 +108,12 @@ const routeTree = rootRoute.addChildren([
   trackIssuesRoute,
   resolveQuestionRoute,
   announcementsRoute,
+  leaderboardRoute,
   adminRoute,
 ]);
 
 export const router = createRouter({ routeTree });
+
 
 // Register your router for maximum type safety
 declare module '@tanstack/react-router' {

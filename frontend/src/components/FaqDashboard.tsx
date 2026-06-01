@@ -3,6 +3,8 @@ import axios from 'axios';
 import Fuse from 'fuse.js';
 import FAQPromoterCard from './admin/faq/FAQPromoterCard';
 import { useLanguage } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 import '../styles/admin.css';
 
 interface FaqItem {
@@ -51,6 +53,7 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
   onRefreshFaqs,
 }) => {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showAddModal, setShowAddModal] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -59,10 +62,21 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
     setShowSuggestions(searchQuery.trim().length >= 3);
   }, [searchQuery]);
 
+  // Dynamic localStorage key: per-user when logged in, 'guest' when not
+  const RATING_KEY = user?.email ? `vins_faq_ratings_${user.email}` : 'vins_faq_ratings_guest';
+
   // Tracks which FAQs the user has already rated (localStorage dedup)
   const [ratedIds, setRatedIds] = useState<Record<string, 'helpful' | 'not_helpful'>>(() => {
-    try { return JSON.parse(localStorage.getItem('vins_faq_ratings') || '{}'); } catch { return {}; }
+    try { return JSON.parse(localStorage.getItem(RATING_KEY) || '{}'); } catch { return {}; }
   });
+
+  // Reload ratings when user changes (e.g. login/logout) so key switch is reflected
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(RATING_KEY);
+      setRatedIds(stored ? JSON.parse(stored) : {});
+    } catch { setRatedIds({}); }
+  }, [RATING_KEY]);
   // Local optimistic rating counts: faqId → { helpful_count, not_helpful_count }
   const [ratingCounts, setRatingCounts] = useState<Record<string, { helpful_count: number; not_helpful_count: number }>>({});
 
@@ -155,21 +169,45 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
 
   const allExpanded = expandedIds.size > 0 && expandedIds.size === filteredFaqs.length;
 
-  const handleRate = async (faqId: string, rating: 'helpful' | 'not_helpful', faq: FaqItem) => {
-    if (ratedIds[faqId]) return; // already rated
-    // Optimistic update
-    const base = ratingCounts[faqId] ?? { helpful_count: faq.helpful_count ?? 0, not_helpful_count: faq.not_helpful_count ?? 0 };
-    const updated = rating === 'helpful'
-      ? { ...base, helpful_count: base.helpful_count + 1 }
-      : { ...base, not_helpful_count: base.not_helpful_count + 1 };
-    setRatingCounts((prev) => ({ ...prev, [faqId]: updated }));
-    const newRated = { ...ratedIds, [faqId]: rating };
+  const handleRate = async (faqId: string, rating: 'helpful' | 'not_helpful') => {
+    if (!user || !user.email) {
+      alert('Please log in to upvote or downvote FAQs!');
+      return;
+    }
+
+    const prevRating = ratedIds[faqId];
+    let newRating: 'helpful' | 'not_helpful' | null = rating;
+
+    // Toggle off if clicking the same rating
+    if (prevRating === rating) {
+      newRating = null;
+    }
+
+    // Update local UI state (for button highlight) — server is authoritative for counts
+    const newRated = { ...ratedIds };
+    if (newRating === null) {
+      delete newRated[faqId];
+    } else {
+      newRated[faqId] = newRating;
+    }
     setRatedIds(newRated);
-    localStorage.setItem('vins_faq_ratings', JSON.stringify(newRated));
-    // Persist to backend
+    localStorage.setItem(RATING_KEY, JSON.stringify(newRated));
+
+    // Backend handles idempotent $addToSet/$pull using email as unique key
+    // Only the server-returned counts are used to update the UI
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/faqs/${faqId}/rate`, { rating });
-    } catch { /* silent */ }
+      // On toggle-off send rating=clickedRating so backend detects the repeat
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/faqs/${faqId}/rate`, {
+        rating: prevRating === rating ? rating : newRating, // sent rating = what was just clicked
+        oldRating: prevRating,
+        email: user.email,
+      });
+      if (res.data) {
+        setRatingCounts((prev) => ({ ...prev, [faqId]: res.data }));
+      }
+    } catch (err) {
+      console.error('Failed to save rating:', err);
+    }
   };
 
   const renderFaqItem = (faq: FaqItem, isExpanded: boolean, index?: number) => {
@@ -228,47 +266,89 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
             dangerouslySetInnerHTML={{ __html: faq.answer }}
           />
           {/* Rating thumbs */}
-          {(() => {
+          {!isAdmin && (() => {
             const counts = ratingCounts[faq._id] ?? { helpful_count: faq.helpful_count ?? 0, not_helpful_count: faq.not_helpful_count ?? 0 };
             const userRating = ratedIds[faq._id];
             return (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '14px', paddingTop: '12px', borderTop: '1px solid var(--border)' }}>
-                <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>{t.faqDashboard.wasHelpful}</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '14px',
+                marginTop: '18px',
+                paddingTop: '16px',
+                borderTop: '1px solid var(--border)'
+              }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginRight: '6px' }}>{t.faqDashboard.wasHelpful}</span>
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); handleRate(faq._id, 'helpful', faq); }}
-                  disabled={!!userRating}
+                  disabled={!user}
+                  onClick={(e) => { e.stopPropagation(); handleRate(faq._id, 'helpful'); }}
+                  className={!user ? 'pointer-events-none' : ''}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 10px',
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px',
                     borderRadius: 'var(--radius-sm)',
                     border: `1px solid ${userRating === 'helpful' ? '#34c759' : 'var(--border)'}`,
-                    background: userRating === 'helpful' ? 'rgba(52,199,89,0.1)' : 'transparent',
+                    background: userRating === 'helpful' ? 'rgba(52,199,89,0.12)' : 'transparent',
                     color: userRating === 'helpful' ? '#34c759' : 'var(--text-muted)',
-                    fontSize: '12px', fontWeight: 600, cursor: userRating ? 'default' : 'pointer',
+                    fontSize: '12.5px', fontWeight: 600,
+                    cursor: user ? 'pointer' : 'not-allowed',
+                    opacity: user ? 1 : 0.45,
                     transition: 'all 0.15s',
                   }}
-                  onMouseOver={(e) => { if (!userRating) { e.currentTarget.style.borderColor = '#34c759'; e.currentTarget.style.color = '#34c759'; }}}
-                  onMouseOut={(e) => { if (!userRating) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; }}}
+                  onMouseOver={(e) => {
+                    if (!user) return;
+                    e.currentTarget.style.borderColor = '#34c759';
+                    e.currentTarget.style.color = '#34c759';
+                    if (userRating === 'helpful') {
+                      e.currentTarget.style.background = 'rgba(52,199,89,0.2)';
+                    } else {
+                      e.currentTarget.style.background = 'rgba(52,199,89,0.05)';
+                    }
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = userRating === 'helpful' ? '#34c759' : 'var(--border)';
+                    e.currentTarget.style.color = userRating === 'helpful' ? '#34c759' : 'var(--text-muted)';
+                    e.currentTarget.style.background = userRating === 'helpful' ? 'rgba(52,199,89,0.12)' : 'transparent';
+                  }}
                 >
-                  👍 {counts.helpful_count > 0 && counts.helpful_count}
+                  <ThumbsUp size={13} style={{ display: 'inline-flex', alignItems: 'center' }} />
+                  {counts.helpful_count > 0 ? counts.helpful_count : 0}
                 </button>
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); handleRate(faq._id, 'not_helpful', faq); }}
-                  disabled={!!userRating}
+                  disabled={!user}
+                  onClick={(e) => { e.stopPropagation(); handleRate(faq._id, 'not_helpful'); }}
+                  className={!user ? 'pointer-events-none' : ''}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '4px', padding: '4px 10px',
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px',
                     borderRadius: 'var(--radius-sm)',
                     border: `1px solid ${userRating === 'not_helpful' ? '#ff3b30' : 'var(--border)'}`,
-                    background: userRating === 'not_helpful' ? 'rgba(255,59,48,0.08)' : 'transparent',
+                    background: userRating === 'not_helpful' ? 'rgba(255,59,48,0.1)' : 'transparent',
                     color: userRating === 'not_helpful' ? '#ff3b30' : 'var(--text-muted)',
-                    fontSize: '12px', fontWeight: 600, cursor: userRating ? 'default' : 'pointer',
+                    fontSize: '12.5px', fontWeight: 600,
+                    cursor: user ? 'pointer' : 'not-allowed',
+                    opacity: user ? 1 : 0.45,
                     transition: 'all 0.15s',
                   }}
-                  onMouseOver={(e) => { if (!userRating) { e.currentTarget.style.borderColor = '#ff3b30'; e.currentTarget.style.color = '#ff3b30'; }}}
-                  onMouseOut={(e) => { if (!userRating) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-muted)'; }}}
+                  onMouseOver={(e) => {
+                    if (!user) return;
+                    e.currentTarget.style.borderColor = '#ff3b30';
+                    e.currentTarget.style.color = '#ff3b30';
+                    if (userRating === 'not_helpful') {
+                      e.currentTarget.style.background = 'rgba(255,59,48,0.18)';
+                    } else {
+                      e.currentTarget.style.background = 'rgba(255,59,48,0.05)';
+                    }
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = userRating === 'not_helpful' ? '#ff3b30' : 'var(--border)';
+                    e.currentTarget.style.color = userRating === 'not_helpful' ? '#ff3b30' : 'var(--text-muted)';
+                    e.currentTarget.style.background = userRating === 'not_helpful' ? 'rgba(255,59,48,0.1)' : 'transparent';
+                  }}
                 >
-                  👎 {counts.not_helpful_count > 0 && counts.not_helpful_count}
+                  <ThumbsDown size={13} style={{ display: 'inline-flex', alignItems: 'center' }} />
+                  {counts.not_helpful_count > 0 ? counts.not_helpful_count : 0}
                 </button>
                 {userRating && <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontStyle: 'italic' }}>{t.faqDashboard.thanksFeedback}</span>}
               </div>

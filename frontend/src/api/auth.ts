@@ -19,8 +19,10 @@ export interface SyncedUser {
 }
 
 /** Email + password sign-in via Firebase */
-export const loginWithEmail = (email: string, password: string) =>
-  signInWithEmailAndPassword(auth, email, password);
+export const loginWithEmail = (email: string, password: string) => {
+  if (!auth) throw new Error('Firebase not configured');
+  return signInWithEmailAndPassword(auth, email, password);
+};
 
 /** Register a new account, set display name, send verification email */
 export const registerWithEmail = async (
@@ -28,6 +30,7 @@ export const registerWithEmail = async (
   email: string,
   password: string,
 ) => {
+  if (!auth) throw new Error('Firebase not configured');
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(cred.user, { displayName: name });
   await sendEmailVerification(cred.user);
@@ -35,14 +38,22 @@ export const registerWithEmail = async (
 };
 
 /** Google OAuth popup sign-in */
-export const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
+export const loginWithGoogle = () => {
+  if (!auth) throw new Error('Firebase not configured');
+  return signInWithPopup(auth, googleProvider);
+};
 
 /** Sign out of Firebase */
-export const logout = () => signOut(auth);
+export const logout = () => {
+  if (!auth) return Promise.resolve();
+  return signOut(auth);
+};
 
 /** Send password-reset email via Firebase */
-export const resetPassword = (email: string) =>
-  sendPasswordResetEmail(auth, email);
+export const resetPassword = (email: string) => {
+  if (!auth) throw new Error('Firebase not configured');
+  return sendPasswordResetEmail(auth, email);
+};
 
 /**
  * POST /api/auth/sync
