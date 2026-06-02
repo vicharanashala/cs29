@@ -11,7 +11,7 @@ interface Reply {
 
 interface AnswerReviewListProps {
   replies: Reply[];
-  onApprove: (text: string) => void;
+  onApprove: (text: string, authorEmail?: string) => void;
   onReframe: (text: string) => void;
 }
 
@@ -51,7 +51,7 @@ export const AnswerReviewList: React.FC<AnswerReviewListProps> = ({
         <AnswerApprovalCard
           key={index}
           reply={reply}
-          onApprove={onApprove}
+          onApprove={(text, authorEmail) => onApprove(text, authorEmail)}
           onReframe={onReframe}
         />
       ))}

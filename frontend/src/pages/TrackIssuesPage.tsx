@@ -100,7 +100,6 @@ export const TrackIssuesPage: React.FC = () => {
 
   // Track stats
   const totalRaised = issues.length;
-  const resolvedCount = issues.filter(i => i.status === 'resolved').length;
   const reviewCount = issues.filter(i => i.status === 'review').length;
   const queueCount = issues.filter(i => i.status === 'queue').length;
 

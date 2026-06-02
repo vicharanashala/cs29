@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Database, HelpCircle, Eye, CheckCircle2, Clock, AlertCircle, TrendingUp, PieChart as PieIcon } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, CartesianGrid, Legend,
+  PieChart, Pie, Cell, LineChart, Line, CartesianGrid,
 } from 'recharts';
 import { TopFAQsList } from './TopFAQsList';
 
