@@ -49,14 +49,16 @@ export const QueryApprovalCard: React.FC<QueryApprovalCardProps> = ({
  ) => {
   setResolutionText(text);
 
+  // Resolve the issue — SP rewards are NOT awarded here.
+  // They are awarded ONLY after the admin publishes the Q&A as an FAQ.
   onStatusChange(
     issue.id,
     'resolved',
     text,
     {
-      awardPoints: 10,     // asker gets 10 SP
+      awardPoints: 0,      // asker gets 0 SP until FAQ is published
       peerEmail: authorEmail,
-      peerPoints: 5        // peer gets 5 SP
+      peerPoints: 0        // peer gets 0 SP until FAQ is published
     }
   );
  };
@@ -70,6 +72,9 @@ export const QueryApprovalCard: React.FC<QueryApprovalCardProps> = ({
     onStatusChange(issue.id, 'resolved', resolutionText.trim());
   };
 
+  // Keep track of which peer's answer is being published (for SP reward)
+  const [publishedPeerEmail, setPublishedPeerEmail] = useState<string | undefined>(undefined);
+
   const handlePublish = async () => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/faqs`, {
@@ -78,6 +83,20 @@ export const QueryApprovalCard: React.FC<QueryApprovalCardProps> = ({
         category: issue.category || 'General',
       });
       setIsPublished(true);
+
+      // Award SP ONLY after FAQ is successfully published
+      // Asker: +10 SP, Peer responder: +5 SP (if a peer answered)
+      onStatusChange(
+        issue.id,
+        'resolved',   // status is already resolved; this call is only for SP reward
+        resolutionText || issue.resolution || undefined,
+        {
+          awardPoints: 10,          // asker gets 10 SP
+          peerEmail: publishedPeerEmail,
+          peerPoints: 5,            // peer gets 5 SP + answered_count
+        }
+      );
+
       onPublishAsFaq(issue);
       setTimeout(() => setIsPublished(false), 3000);
     } catch (err) {
@@ -154,7 +173,10 @@ export const QueryApprovalCard: React.FC<QueryApprovalCardProps> = ({
       {/* Peer answers */}
       <AnswerReviewList
         replies={issue.replies}
-        onApprove={handleApproveAnswer}
+        onApprove={(text, authorEmail) => {
+          handleApproveAnswer(text, authorEmail);
+          setPublishedPeerEmail(authorEmail); // remember who answered, for SP on publish
+        }}
         onReframe={handleReframe}
       />
 
