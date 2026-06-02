@@ -58,8 +58,13 @@ async function generateEmbedding(text: string, apiKey: string): Promise<number[]
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 async function migrate() {
-  const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/samagama';
+  const mongoUri = process.env.MONGO_URI;
   const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!mongoUri) {
+    console.error('❌  MONGO_URI environment variable is not set.');
+    process.exit(1);
+  }
 
   if (!apiKey) {
     console.error('❌  GEMINI_API_KEY environment variable is not set.');

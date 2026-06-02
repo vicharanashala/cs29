@@ -14,3 +14,6 @@ backend/.DS_Store
 **/.DS_Store
 *.BAK
 *.BAK_*
+
+# Backend environment (contains real credentials)
+backend/.env
