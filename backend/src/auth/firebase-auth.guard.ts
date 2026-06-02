@@ -12,11 +12,27 @@ export class FirebaseAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<{
-      headers: { authorization?: string };
-      user?: { uid: string; email: string; role: string };
+      headers: { authorization?: string; 'x-user-email'?: string };
+      user?: { uid?: string; email: string; role: string };
     }>();
 
     const authHeader = request.headers.authorization;
+    const userEmailHeader = request.headers['x-user-email'];
+
+    // ── Prototype bypass: allow local mock admin account ──────────────────
+    // Frontend sends Authorization: <email> (no "Bearer " prefix) when
+    // logged in without Firebase. Guard also receives x-user-email header.
+    if (
+      authHeader &&
+      !authHeader.startsWith('Bearer ') &&
+      userEmailHeader === 'admin@vins.in' &&
+      authHeader.trim() === 'admin@vins.in'
+    ) {
+      request.user = { email: 'admin@vins.in', role: 'admin' };
+      return true;
+    }
+    // ─────────────────────────────────────────────────────────────────────
+
     if (!authHeader?.startsWith('Bearer ')) {
       throw new UnauthorizedException('Missing or invalid Authorization header');
     }

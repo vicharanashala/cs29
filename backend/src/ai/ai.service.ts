@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, Types, ConnectOptions } from 'mongoose';
 import axios from 'axios';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { FAQ, FAQDocument } from '../faqs/schemas/faq.schema';
@@ -19,7 +19,7 @@ interface UnknownResponse {
 }
 
 @Injectable()
-export class AiService {
+export class AiService implements OnModuleInit {
   private readonly logger = new Logger(AiService.name);
 
   // Embedding model confirmed working: gemini-embedding-001 on v1 API (3072 dims)
@@ -30,6 +30,53 @@ export class AiService {
     @InjectModel(FAQ.name) private readonly faqModel: Model<FAQDocument>,
     @InjectModel(PendingFaq.name) private readonly pendingFaqModel: Model<PendingFaqDocument>,
   ) {}
+
+  // ─── OnModuleInit: ensure vector search index exists ─────────────────────────
+
+  async onModuleInit(): Promise<void> {
+    try {
+      // Confirm Atlas Vector Search index doesn't already exist before creating
+      // this.faqModel.collection is the raw MongoDB collection (bypasses Mongoose getters/setters)
+      const collection = this.faqModel.collection;
+      const existingIndexes = await collection.listSearchIndexes().toArray();
+      const vectorIndexExists = existingIndexes.some((idx: any) => idx.name === 'vector_index');
+
+      if (vectorIndexExists) {
+        this.logger.log('vector_index already exists — skipping creation');
+        return;
+      }
+
+      this.logger.warn(
+        'vector_index not found — creating it now. ' +
+        'Note: MongoDB Atlas Vector Search requires an M10+ cluster tier. ' +
+        'If you see a "not supported" error your Atlas plan is too low.',
+      );
+
+      await collection.createSearchIndex({
+        name: 'vector_index',
+        definition: {
+          mappings: {
+            dynamic: false,
+            fields: {
+              embedding: {
+                type: 'knnVector',
+                dimensions: 3072,   // Must match gemini-embedding-001 output (3072 dims)
+                similarity: 'cosine',
+              },
+            },
+          },
+        },
+      });
+
+      this.logger.log('vector_index created successfully');
+    } catch (err) {
+      this.logger.error(
+        'Failed to create vector_index — vector search will fall back to text search: ' +
+          (err instanceof Error ? err.message : String(err)),
+      );
+      // Do not re-throw — allow the app to start. Vector search will degrade gracefully.
+    }
+  }
 
   // ─── Embedding Generation ─────────────────────────────────────────────────────
 
@@ -262,6 +309,7 @@ export class AiService {
       'FAQ Context:\n' + contextBlock + '\n\n' +
       'Question:\n' + query + '\n\n' +
       'Rules:\n' +
+      '- NEVER start your answer with robotic phrases like "Based on the database context" or "According to the context provided". Speak naturally, authoritatively, and directly as Yaksha, the AI mentor.\n' +
       '- If the answer exists in the context, answer confidently without referencing "the context" or "database".\n' +
       '- If partially covered, answer using available information and mention any limitations.\n' +
       '- If unavailable, output ONLY this JSON (no extra text): ' +

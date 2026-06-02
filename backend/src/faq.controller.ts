@@ -138,16 +138,56 @@ export class FaqController {
   @Post(':id/rate')
   async rateFaq(
     @Param('id') id: string,
-    @Body() body: { rating: 'helpful' | 'not_helpful' },
+    @Body() body: { rating?: 'helpful' | 'not_helpful' | null; oldRating?: 'helpful' | 'not_helpful' | null; email: string },
   ): Promise<{ helpful_count: number; not_helpful_count: number } | null> {
-    if (body.rating !== 'helpful' && body.rating !== 'not_helpful') return null;
-    const field = body.rating === 'helpful' ? 'helpful_count' : 'not_helpful_count';
-    const updated = await this.faqModel.findByIdAndUpdate(
-      id,
-      { $inc: { [field]: 1 } },
-      { new: true, projection: { helpful_count: 1, not_helpful_count: 1 } },
-    ).exec();
-    if (!updated) return null;
-    return { helpful_count: updated.helpful_count, not_helpful_count: updated.not_helpful_count };
+    const { rating, oldRating, email } = body;
+    if (!email) return null;
+
+    const incOps: Record<string, number> = {};
+    let emailMoved = false;
+
+    // Scenario A: Toggle off (clicking same rating again)
+    if (rating !== undefined && rating === oldRating) {
+      const field = rating === 'helpful' ? 'helpful_count' : 'not_helpful_count';
+      incOps[field] = -1;
+    }
+    // Scenario B: New vote (no prior rating)
+    else if (rating && !oldRating) {
+      const field = rating === 'helpful' ? 'helpful_count' : 'not_helpful_count';
+      incOps[field] = 1;
+    }
+    // Scenario C: Switching between upvote and downvote
+    else if (rating && oldRating && rating !== oldRating) {
+      const oldField = oldRating === 'helpful' ? 'helpful_count' : 'not_helpful_count';
+      const newField = rating === 'helpful' ? 'helpful_count' : 'not_helpful_count';
+      incOps[oldField] = -1;
+      incOps[newField] = 1;
+      emailMoved = true;
+    }
+
+    // Execute atomic update only when there's a real state change
+    if (Object.keys(incOps).length > 0) {
+      const updateOps: Record<string, unknown> = { $inc: incOps };
+      // Keep email arrays in sync: pull from old array, add to new array
+      if (rating !== undefined && rating === oldRating) {
+        const removeFrom = rating === 'helpful' ? 'upvotedBy' : 'downvotedBy';
+        (updateOps as Record<string, unknown>).$pull = { [removeFrom]: email };
+      } else if (rating && oldRating && rating !== oldRating) {
+        (updateOps as Record<string, unknown>).$pull = { [oldRating === 'helpful' ? 'upvotedBy' : 'downvotedBy']: email };
+        (updateOps as Record<string, unknown>).$addToSet = { [rating === 'helpful' ? 'upvotedBy' : 'downvotedBy']: email };
+      } else if (rating && !oldRating) {
+        (updateOps as Record<string, unknown>).$addToSet = { [rating === 'helpful' ? 'upvotedBy' : 'downvotedBy']: email };
+      }
+      await this.faqModel.findByIdAndUpdate(id, updateOps).exec();
+    }
+
+    // Return fresh authoritative count values from the database document
+    const updatedFaq = await this.faqModel.findById(id).exec();
+    if (!updatedFaq) return null;
+
+    return {
+      helpful_count: updatedFaq.helpful_count,
+      not_helpful_count: updatedFaq.not_helpful_count,
+    };
   }
 }
