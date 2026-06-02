@@ -56,6 +56,7 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
   const { user } = useAuth();
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showAddModal, setShowAddModal] = useState(false);
+  const VIEWED_KEY = 'vins_faq_viewed';
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Automatically expand FAQ based on hash on mount or when hash changes (Issue 7)
@@ -147,16 +148,23 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
       } else {
         newSet.add(id);
 
-        // Find and increment locally for instant Admin visual feedback
-        const faqItem = faqs.find(f => f._id === id);
-        if (faqItem) {
-          faqItem.view_count = (faqItem.view_count || 0) + 1;
-        }
+        // Deduplicate: only increment once per id per browser session (survives logout, clears on tab close)
+        const viewed: string[] = JSON.parse(sessionStorage.getItem(VIEWED_KEY) || '[]');
+        if (!viewed.includes(id)) {
+          viewed.push(id);
+          sessionStorage.setItem(VIEWED_KEY, JSON.stringify(viewed));
 
-        // Increment view count in MongoDB
-        axios.patch(`${import.meta.env.VITE_API_URL}/api/faqs/${id}/view`).catch(err => {
-          console.error('Failed to increment FAQ view count:', err);
-        });
+          // Find and increment locally for instant Admin visual feedback
+          const faqItem = faqs.find(f => f._id === id);
+          if (faqItem) {
+            faqItem.view_count = (faqItem.view_count || 0) + 1;
+          }
+
+          // Increment view count in MongoDB
+          axios.patch(`${import.meta.env.VITE_API_URL}/api/faqs/${id}/view`).catch(err => {
+            console.error('Failed to increment FAQ view count:', err);
+          });
+        }
       }
       return newSet;
     });

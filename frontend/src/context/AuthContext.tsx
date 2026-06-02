@@ -170,6 +170,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setUser(null);
     localStorage.removeItem('auth_user');
+    sessionStorage.removeItem('vins_faq_viewed');
     window.location.href = '/';
   };
 
