@@ -197,7 +197,7 @@
 
 .btn-primary:hover {
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
 }
 
 .btn-secondary {
@@ -208,7 +208,7 @@
 
 .btn-secondary:hover {
   background: var(--bg-card-hover);
-  color: var(--text-primary);
+  color: var(--text-primary) !important;
   border-color: var(--border-hover);
 }
 
@@ -220,6 +220,7 @@
 
 .btn-accent:hover {
   background: var(--accent-hover);
+  color: #000 !important;
   box-shadow: 0 4px 20px var(--accent-glow-strong);
   transform: translateY(-1px);
 }
@@ -559,7 +560,7 @@
 
 [data-theme="light"] .btn-primary:hover {
   background: transparent;
-  color: #1d1d1f;
+  color: #1d1d1f !important;
 }
 
 /* ── Responsive ── */

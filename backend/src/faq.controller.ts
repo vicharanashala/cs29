@@ -3,11 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { FAQ, FAQDocument } from './faqs/schemas/faq.schema';
 import { AiService } from './ai/ai.service';
+import { Notification, NotificationDocument } from './notifications/schemas/notification.schema';
+import { User, UserDocument } from './users/schemas/user.schema';
 
 @Controller('api/faqs')
 export class FaqController {
   constructor(
     @InjectModel(FAQ.name) private readonly faqModel: Model<FAQDocument>,
+    @InjectModel(Notification.name) private readonly notificationModel: Model<NotificationDocument>,
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly aiService: AiService,
   ) {}
 
@@ -92,6 +96,25 @@ export class FaqController {
       ...createFaqDto,
       view_count: 0,
     });
+
+    // Notify all users about the new FAQ (fire-and-forget)
+    if (faq._id) {
+      this.userModel.find({}, 'email').lean().exec()
+        .then((users) => {
+          const notifications = users.map((u) => ({
+            recipientEmail: u.email,
+            title: 'New FAQ published',
+            body: `Check out the new FAQ: "${faq.question}" in ${faq.category}.`,
+            type: 'new_faq',
+            issueId: String(faq._id),
+            read: false,
+          }));
+          if (notifications.length > 0) {
+            return this.notificationModel.insertMany(notifications);
+          }
+        })
+        .catch((err) => console.error('Failed to broadcast new FAQ notification:', err));
+    }
 
     // Fire-and-forget: generate embedding for the new FAQ so it's immediately searchable
     if (faq._id && createFaqDto.question) {

@@ -26,23 +26,41 @@ interface Issue {
 
 interface QueryApprovalCardProps {
   issue: Issue;
-  onStatusChange: (issueId: string, newStatus: 'queue' | 'review' | 'resolved', resolution?: string) => void;
+ onStatusChange: (
+  issueId: string,
+  newStatus: 'queue' | 'review' | 'resolved',
+  resolution?: string,
+  reward?: { peerEmail?: string; peerPoints?: number; awardPoints?: number }
+  ) => void;
   onPublishAsFaq: (issue: Issue) => void;
-}
+ }
 
 export const QueryApprovalCard: React.FC<QueryApprovalCardProps> = ({
   issue,
   onStatusChange,
   onPublishAsFaq,
-}) => {
+ }) => {
   const [resolutionText, setResolutionText] = useState(issue.resolution || '');
   const [isPublished, setIsPublished] = useState(false);
 
-  const handleApproveAnswer = (text: string) => {
-    setResolutionText(text);
-    onStatusChange(issue.id, 'resolved', text);
-  };
+  const handleApproveAnswer = (
+  text: string,
+  authorEmail?: string
+ ) => {
+  setResolutionText(text);
 
+  onStatusChange(
+    issue.id,
+    'resolved',
+    text,
+    {
+      awardPoints: 10,     // asker gets 10 SP
+      peerEmail: authorEmail,
+      peerPoints: 5        // peer gets 5 SP
+    }
+  );
+ };
+    
   const handleReframe = (text: string) => {
     setResolutionText(text);
   };
@@ -162,15 +180,17 @@ export const QueryApprovalCard: React.FC<QueryApprovalCardProps> = ({
               <Sparkles size={14} /> {isPublished ? 'Published! ✓' : 'Publish as FAQ'}
             </button>
           )}
-          <button
-            type="button"
-            className="btn-accent"
-            onClick={handleResolveWithCustom}
-            disabled={!resolutionText.trim()}
-            style={{ padding: '10px 20px', fontSize: '13px' }}
-          >
-            <CheckCircle2 size={14} /> Resolve Issue
-          </button>
+          {issue.status !== 'resolved' && (
+            <button
+              type="button"
+              className="btn-accent"
+              onClick={handleResolveWithCustom}
+              disabled={!resolutionText.trim()}
+              style={{ padding: '10px 20px', fontSize: '13px' }}
+            >
+              <CheckCircle2 size={14} /> Resolve Issue
+            </button>
+          )}
         </div>
       </div>
     </div>

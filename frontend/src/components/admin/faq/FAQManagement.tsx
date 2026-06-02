@@ -197,6 +197,7 @@ export const FAQManagement: React.FC = () => {
                   onClick={() => {
                     setShowCreateForm(false);
                     setEditingFaq(faq);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                 >
                   <Edit3 size={14} />

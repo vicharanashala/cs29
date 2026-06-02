@@ -49,6 +49,18 @@ export const AnnouncementForm: React.FC = () => {
     };
 
     saveAnnouncements([newAnnouncement, ...announcements]);
+
+    // Broadcast notification to all users
+    fetch(`${import.meta.env.VITE_API_URL}/api/notifications/broadcast`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: `New Announcement: ${newAnnouncement.title}`,
+        body: newAnnouncement.body,
+        type: 'announcement',
+      }),
+    }).catch((err) => console.error('Failed to broadcast announcement:', err));
+
     setTitle('');
     setBody('');
     setPriority('info');

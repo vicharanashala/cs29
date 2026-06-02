@@ -3,7 +3,13 @@ import { HydratedDocument } from 'mongoose';
 
 export type NotificationDocument = HydratedDocument<Notification>;
 
-export type NotificationType = 'issue_resolved' | 'reply_received' | 'answer_approved' | 'announcement';
+export type NotificationType =
+  | 'issue_resolved'
+  | 'reply_received'
+  | 'answer_approved'
+  | 'announcement'
+  | 'new_faq'
+  | 'new_query';
 
 @Schema({ timestamps: true, collection: 'notifications' })
 export class Notification {

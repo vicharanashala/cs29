@@ -6,6 +6,7 @@ import '../styles/portal.css';
 
 interface Reply {
   author: string;
+  authorEmail?: string;
   role: 'student' | 'mentor' | 'admin';
   text: string;
   time: string;
@@ -36,6 +37,7 @@ export const TrackIssuesPage: React.FC = () => {
   const [replyText, setReplyText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isPublished, setIsPublished] = useState(false);
+  const [spurtiPoints, setSpurtiPoints] = useState(0);
 
   // Load issues from backend
   // NOTE: useEffect MUST be declared before any conditional return (Rules of Hooks)
@@ -47,11 +49,47 @@ export const TrackIssuesPage: React.FC = () => {
         const arr: Issue[] = Array.isArray(data)
           ? (data as Issue[])
           : ((data as any)?.data ?? (data as any)?.issues ?? []);
-        setIssues(arr);
+        const mapped = arr.map((issue: any) => ({
+          ...issue,
+          status: issue.status === 'resolved'
+            ? 'resolved'
+            : (issue.replies && issue.replies.length > 0 ? 'review' : 'queue')
+        }));
+        setIssues(mapped);
         setIsLoading(false);
       })
       .catch(err => { console.error('Failed to load issues:', err); setIsLoading(false); });
   }, [user]);
+  useEffect(() => {
+  if (!user?.email) return;
+
+  fetch(`${import.meta.env.VITE_API_URL}/api/rewards/my-points/${encodeURIComponent(user.email)}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setSpurtiPoints(data.reward_points ?? 0);
+    })
+    .catch(() => {
+      setSpurtiPoints(0);
+    });
+}, [user]);
+
+  // Automatically select issue from URL hash or query params
+  useEffect(() => {
+    const handleLocationSelect = () => {
+      const hash = window.location.hash;
+      const idFromHash = hash && hash.startsWith('#') ? hash.slice(1) : null;
+      const params = new URLSearchParams(window.location.search);
+      const idFromQuery = params.get('id');
+      const targetId = idFromHash || idFromQuery;
+      if (targetId && issues.some(i => i.id === targetId)) {
+        setSelectedIssueId(targetId);
+        setStatusFilter('all');
+      }
+    };
+    if (issues.length > 0) {
+      handleLocationSelect();
+    }
+  }, [issues]);
 
   if (!user) {
     navigate({ to: '/login' });
@@ -65,7 +103,7 @@ export const TrackIssuesPage: React.FC = () => {
   const resolvedCount = issues.filter(i => i.status === 'resolved').length;
   const reviewCount = issues.filter(i => i.status === 'review').length;
   const queueCount = issues.filter(i => i.status === 'queue').length;
-  const spurtiPoints = resolvedCount * 25 + reviewCount * 10;
+
 
   // Filter issues
   const filteredIssues = issues.filter(issue => {
@@ -86,15 +124,26 @@ export const TrackIssuesPage: React.FC = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          author: user.name || user.email.split('@')[0],
-          role: user.role,
-          text: replyText.trim(),
+         author: user.name || user.email.split('@')[0],
+         authorEmail: user.email,
+         role: user.role,
+         text: replyText.trim(),
         }),
       });
 
       if (res.ok) {
         const updated = await res.json();
-        setIssues(prev => prev.map(i => i.id === activeIssue.id ? { ...i, replies: updated.replies } : i));
+        setIssues(prev => prev.map(i => {
+          if (i.id === activeIssue.id) {
+            const newReplies = updated.replies || [];
+            return {
+              ...i,
+              replies: newReplies,
+              status: i.status === 'resolved' ? 'resolved' : (newReplies.length > 0 ? 'review' : 'queue')
+            };
+          }
+          return i;
+        }));
         setReplyText('');
       }
     } catch (err) {
@@ -108,7 +157,10 @@ export const TrackIssuesPage: React.FC = () => {
       await fetch(`${import.meta.env.VITE_API_URL}/api/issues/${issue.id}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'resolved', resolution: 'Published as FAQ' }),
+        body: JSON.stringify({
+        status: 'resolved',
+        resolution: 'Published as FAQ',
+        }),
       });
       setIssues(prev => prev.map(i => i.id === issue.id ? { ...i, status: 'resolved' as const } : i));
       setSelectedIssueId(null);

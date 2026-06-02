@@ -448,37 +448,45 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
             {sessions.map(session => (
               <div
                 key={session.id}
-                className={`session-item ${session.id === currentSessionId ? 'active' : ''}`}
+                className={`history-session-item ${session.id === currentSessionId ? 'active' : ''}`}
                 onClick={() => { setCurrentSessionId(session.id); if (!isSidebarOpen) setIsSidebarOpen(true); }}
               >
-                <MessageSquare size={14} />
-                {editingSessionId === session.id ? (
-                  <input
-                    className="session-title-input"
-                    value={editTitleText}
-                    onChange={e => setEditTitleText(e.target.value)}
-                    onBlur={() => handleSaveTitle(session.id)}
-                    onKeyDown={e => { if (e.key === 'Enter') handleSaveTitle(session.id); }}
-                    autoFocus
-                    onClick={e => e.stopPropagation()}
-                  />
-                ) : (
-                  <span className="session-title">{session.title}</span>
-                )}
-                <button
-                  className="session-action"
-                  onClick={(e) => { e.stopPropagation(); handleDeleteSession(session.id); }}
-                  title="Delete session"
-                >
-                  <Trash2 size={12} />
-                </button>
-                <button
-                  className="session-action"
-                  onClick={(e) => { e.stopPropagation(); handleStartEditing(session); }}
-                  title="Rename session"
-                >
-                  <Edit2 size={12} />
-                </button>
+                <MessageSquare size={14} className="session-icon" />
+                <div className="session-info">
+                  {editingSessionId === session.id ? (
+                    <input
+                      className="session-rename-input"
+                      value={editTitleText}
+                      onChange={e => setEditTitleText(e.target.value)}
+                      onBlur={() => handleSaveTitle(session.id)}
+                      onKeyDown={e => { if (e.key === 'Enter') handleSaveTitle(session.id); }}
+                      autoFocus
+                      onClick={e => e.stopPropagation()}
+                    />
+                  ) : (
+                    <span className="session-title">{session.title}</span>
+                  )}
+                  <span className="session-date">{session.createdAt}</span>
+                </div>
+                
+                <div className="session-actions">
+                  <button
+                    type="button"
+                    className="session-action-btn"
+                    onClick={(e) => { e.stopPropagation(); handleStartEditing(session); }}
+                    title="Rename session"
+                  >
+                    <Edit2 size={12} />
+                  </button>
+                  <button
+                    type="button"
+                    className="session-action-btn delete"
+                    onClick={(e) => { e.stopPropagation(); handleDeleteSession(session.id); }}
+                    title="Delete session"
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -773,17 +781,50 @@ export const YakshaChat: React.FC<YakshaChatProps> = ({ isModal, onClose }) => {
               )}
             </div>
 
-            {/* Stacked action buttons below transcript */}
-            <div className="w-full flex flex-col gap-4 mt-5 px-1">
+            {/* Action buttons below transcript */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '20px', width: '100%' }}>
               <button
-                className="w-full block text-center py-3.5 bg-amber-50 hover:bg-amber-100 text-amber-500 font-bold rounded-2xl border border-amber-200 transition-all duration-200 text-base cursor-pointer shadow-sm active:scale-[0.99]"
+                type="button"
+                style={{
+                  width: '100%',
+                  padding: '12px 20px',
+                  background: voiceTranscript.trim() ? 'var(--accent)' : 'var(--bg-input)',
+                  color: voiceTranscript.trim() ? '#000000' : 'var(--text-muted)',
+                  border: voiceTranscript.trim() ? 'none' : '1px solid var(--border)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  cursor: voiceTranscript.trim() ? 'pointer' : 'not-allowed',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'var(--font)',
+                  boxShadow: voiceTranscript.trim() ? '0 4px 12px rgba(240, 192, 64, 0.2)' : 'none',
+                }}
                 onClick={closeVoiceModalDone}
                 disabled={!voiceTranscript.trim()}
               >
-                Use Text
+                Use Transcript
               </button>
               <button
-                className="w-full block text-center py-3.5 bg-amber-50/70 hover:bg-amber-100 text-amber-500/80 font-bold rounded-2xl border border-amber-200/60 transition-all duration-200 text-base cursor-pointer shadow-sm active:scale-[0.99]"
+                type="button"
+                style={{
+                  width: '100%',
+                  padding: '12px 20px',
+                  background: 'transparent',
+                  color: '#ff3b30',
+                  border: '1px solid rgba(255, 59, 48, 0.2)',
+                  borderRadius: 'var(--radius-sm)',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: 'var(--font)',
+                }}
                 onClick={closeVoiceModalCancel}
               >
                 Cancel

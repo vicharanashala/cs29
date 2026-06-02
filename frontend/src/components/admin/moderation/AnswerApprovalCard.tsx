@@ -3,6 +3,7 @@ import { CheckCircle2, Edit3 } from 'lucide-react';
 
 interface Reply {
   author: string;
+  authorEmail?: string;
   role: 'student' | 'mentor' | 'admin';
   text: string;
   time: string;
@@ -10,7 +11,7 @@ interface Reply {
 
 interface AnswerApprovalCardProps {
   reply: Reply;
-  onApprove: (text: string) => void;
+  onApprove: (text: string, authorEmail?: string) => void;
   onReframe: (text: string) => void;
 }
 
@@ -51,7 +52,7 @@ export const AnswerApprovalCard: React.FC<AnswerApprovalCardProps> = ({
         <button
           type="button"
           className="admin-approve-btn"
-          onClick={() => onApprove(reply.text)}
+          onClick={() => onApprove(reply.text, reply.authorEmail)}
         >
           <CheckCircle2 size={14} /> Approve Answer
         </button>

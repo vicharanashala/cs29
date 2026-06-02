@@ -200,6 +200,7 @@
 
 .btn-primary:hover {
   opacity: 0.85;
+  color: var(--bg-primary) !important;
   transform: scale(1.03);
 }
 
@@ -221,11 +222,11 @@
 }
 
 .btn-secondary:hover {
-  color: #6cb5ff;
+  color: #6cb5ff !important;
 }
 
 [data-theme="light"] .btn-secondary:hover {
-  color: #0071e3;
+  color: #0071e3 !important;
 }
 
 .scroll-indicator {

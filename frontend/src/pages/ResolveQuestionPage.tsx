@@ -94,6 +94,23 @@ export const ResolveQuestionPage: React.FC = () => {
       });
   }, [user]);
 
+  // Automatically select question from URL hash or query params
+  useEffect(() => {
+    const handleLocationSelect = () => {
+      const hash = window.location.hash;
+      const idFromHash = hash && hash.startsWith('#') ? hash.slice(1) : null;
+      const params = new URLSearchParams(window.location.search);
+      const idFromQuery = params.get('id');
+      const targetId = idFromHash || idFromQuery;
+      if (targetId && issues.some(i => i.id === targetId)) {
+        setSelectedIssueId(targetId);
+      }
+    };
+    if (issues.length > 0) {
+      handleLocationSelect();
+    }
+  }, [issues]);
+
   if (!user) {
     navigate({ to: '/login' });
     return null;

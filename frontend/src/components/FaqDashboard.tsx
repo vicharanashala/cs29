@@ -57,6 +57,25 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [showAddModal, setShowAddModal] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Automatically expand FAQ based on hash on mount or when hash changes (Issue 7)
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith('#')) {
+        const id = hash.slice(1);
+        setExpandedIds((prev) => {
+          const next = new Set(prev);
+          next.add(id);
+          return next;
+        });
+      }
+    };
+    
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
   // Show suggestion dropdown whenever the search query changes and has candidates
   useEffect(() => {
     setShowSuggestions(searchQuery.trim().length >= 3);
@@ -243,8 +262,8 @@ export const FaqDashboard: React.FC<FaqDashboardProps> = ({
             </button>
           )}
 
-          {/* View Tracker (Admin only on Trending tab) */}
-          {isAdmin && activeTab === 'most-asked' && (
+          {/* View Tracker (Admin only on All and Trending tabs - Issue 6) */}
+          {isAdmin && (activeTab === 'all' || activeTab === 'most-asked') && (
             <span
               className="faq-view-tracker"
               title="Total views (Admin only)"

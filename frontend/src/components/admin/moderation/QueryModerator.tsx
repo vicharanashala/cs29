@@ -28,18 +28,38 @@ export const QueryModerator: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<'all' | 'queue' | 'review' | 'resolved'>('all');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const mapIssue = (issue: any): Issue => {
+    return {
+      ...issue,
+      status: issue.status === 'resolved'
+        ? 'resolved'
+        : (issue.replies && issue.replies.length > 0 ? 'review' : 'queue')
+    };
+  };
+
+  const fetchIssues = () => {
+    setIsLoading(true);
+    fetch(`${import.meta.env.VITE_API_URL}/api/issues`)
+      .then((r) => r.json())
+      .then((data: unknown) => {
+        const arr = Array.isArray(data)
+          ? data
+          : ((data as any)?.data ?? (data as any)?.issues ?? []);
+        const mapped = arr.map(mapIssue);
+        setIssues(mapped);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to load issues from backend:', err);
+        setIsLoading(false);
+      });
+  };
 
   useEffect(() => {
-    const stored = localStorage.getItem('vins_raised_issues');
-    if (stored) {
-      setIssues(JSON.parse(stored));
-    }
+    fetchIssues();
   }, []);
-
-  const saveIssues = (updated: Issue[]) => {
-    setIssues(updated);
-    localStorage.setItem('vins_raised_issues', JSON.stringify(updated));
-  };
 
   const filteredIssues = useMemo(() => {
     return issues.filter((issue) => {
@@ -59,23 +79,41 @@ export const QueryModerator: React.FC = () => {
   const reviewCount = issues.filter((i) => i.status === 'review').length;
   const resolvedCount = issues.filter((i) => i.status === 'resolved').length;
 
-  const handleStatusChange = (issueId: string, newStatus: 'queue' | 'review' | 'resolved', resolution?: string) => {
-    const updated = issues.map((issue) => {
-      if (issue.id === issueId) {
-        return {
-          ...issue,
-          status: newStatus,
-          resolution: resolution ?? issue.resolution,
-        };
+  const handleStatusChange = async (
+  issueId: string,
+  newStatus: 'queue' | 'review' | 'resolved',
+  resolution?: string,
+  reward?: {
+    awardPoints?: number;
+    peerEmail?: string;
+    peerPoints?: number;
+   }
+   ) => { 
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/issues/${issueId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        status: newStatus,
+        resolution,
+        awardPoints: reward?.awardPoints,
+        peerEmail: reward?.peerEmail,
+        peerPoints: reward?.peerPoints,
+        }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setIssues((prev) =>
+          prev.map((issue) => (issue.id === issueId ? mapIssue(updated) : issue))
+        );
       }
-      return issue;
-    });
-    saveIssues(updated);
+    } catch (err) {
+      console.error('Failed to update issue status:', err);
+    }
   };
 
-  const handlePublishAsFaq = (_issue: Issue) => {
-    // FAQ has been published via axios in QueryApprovalCard
-    // Could add a toast or visual feedback here
+  const handlePublishAsFaq = () => {
+    fetchIssues();
   };
 
   return (
@@ -105,7 +143,12 @@ export const QueryModerator: React.FC = () => {
         ))}
       </div>
 
-      {issues.length === 0 ? (
+      {isLoading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
+          <div style={{ width: '36px', height: '36px', border: '3px solid var(--border)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 0.8s linear infinite', marginBottom: '12px' }} />
+          <p style={{ fontSize: '14px' }}>Loading queries...</p>
+        </div>
+      ) : issues.length === 0 ? (
         <div className="admin-empty-state">
           <Inbox size={48} />
           <h3>No queries raised yet</h3>

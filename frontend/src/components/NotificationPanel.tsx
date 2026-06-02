@@ -86,12 +86,32 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                   onClose();
                   const titleLower = n.title.toLowerCase();
                   const bodyLower = n.body.toLowerCase();
-                  if (n.type === 'issue_resolved' || n.type === 'reply_received' || titleLower.includes('reply') || titleLower.includes('resolved')) {
-                    navigate({ to: '/track-issues' });
+                  if (
+                    n.type === 'issue_resolved' ||
+                    n.type === 'reply_received' ||
+                    n.type === 'answer_approved' ||
+                    titleLower.includes('reply') ||
+                    titleLower.includes('resolved')
+                  ) {
+                    navigate({ to: '/track-issues' }).then(() => {
+                      if (n.issueId) {
+                        window.location.hash = n.issueId;
+                      }
+                    });
                   } else if (n.type === 'new_faq' || titleLower.includes('new faq')) {
-                    navigate({ to: '/faq' });
+                    navigate({ to: '/faq' }).then(() => {
+                      if (n.issueId) {
+                        window.location.hash = n.issueId;
+                      }
+                    });
                   } else if (n.type === 'new_query' || titleLower.includes('new query') || titleLower.includes('query to resolve')) {
-                    navigate({ to: '/resolve-question' });
+                    navigate({ to: '/resolve-question' }).then(() => {
+                      if (n.issueId) {
+                        window.location.hash = n.issueId;
+                      }
+                    });
+                  } else if (n.type === 'announcement' || titleLower.includes('announcement') || titleLower.includes('announce')) {
+                    navigate({ to: '/announcements' });
                   } else if (titleLower.includes('profile') || bodyLower.includes('profile')) {
                     navigate({ to: '/profile' });
                   }

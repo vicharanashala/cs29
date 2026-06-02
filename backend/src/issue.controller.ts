@@ -19,6 +19,7 @@ import { Notification, NotificationDocument } from './notifications/schemas/noti
 
 export interface Reply {
   author: string;
+  authorEmail?: string;
   role: 'student' | 'mentor' | 'admin';
   text: string;
   time: string;
@@ -49,6 +50,7 @@ class CreateIssueDto {
 
 class PostReplyDto {
   author: string;
+  authorEmail: string;
   role: 'student' | 'mentor' | 'admin';
   text: string;
 }
@@ -91,6 +93,24 @@ export class IssueController {
       replies: [],
     });
     const saved = await issue.save();
+
+    // Notify other users about the new query to resolve (fire-and-forget)
+    this.userModel.find({ email: { $ne: dto.raisedBy } }, 'email').lean().exec()
+      .then((users) => {
+        const notifications = users.map((u) => ({
+          recipientEmail: u.email,
+          title: 'New query to resolve',
+          body: `A new query has been posted: "${saved.title}". Can you help resolve it?`,
+          type: 'new_query',
+          issueId: saved.issueId,
+          read: false,
+        }));
+        if (notifications.length > 0) {
+          return this.notificationModel.insertMany(notifications);
+        }
+      })
+      .catch((err) => console.error('Failed to broadcast new query notification:', err));
+
     // Increment questions_asked for the submitting user (fire-and-forget)
     this.userModel
       .updateOne({ email: dto.raisedBy }, { $inc: { questions_asked: 1 } })
@@ -130,7 +150,13 @@ export class IssueController {
   @Patch(':id/status')
   async updateStatus(
     @Param('id') id: string,
-    @Body() body: { status: string; resolution?: string },
+    @Body() body: {
+   status: string;
+   resolution?: string;
+   awardPoints?: number;
+    peerEmail?: string;
+   peerPoints?: number;
+   },
   ) {
     const statusMap: Record<string, ApprovalStatus> = {
       queue: ApprovalStatus.PENDING,
@@ -147,6 +173,22 @@ export class IssueController {
       .findOneAndUpdate({ issueId: id }, update, { new: true })
       .exec();
     if (!doc) return null;
+    // Award SP to asker
+    if (body.awardPoints && body.awardPoints > 0 && doc.raisedBy) {
+    await this.userModel.updateOne(
+    { email: doc.raisedBy },
+    { $inc: { reward_points: body.awardPoints } }
+  );
+}
+
+// Award SP to peer responder
+    if (body.peerEmail && body.peerPoints && body.peerPoints > 0) {
+    await this.userModel.updateOne(
+    { email: body.peerEmail },
+    { $inc: { reward_points: body.peerPoints, answered_count: 1 } }
+  );
+}
+
     // Notify issue owner when resolved
     if (body.status === 'resolved' && doc.raisedBy) {
       this.notificationModel.create({
@@ -165,6 +207,7 @@ export class IssueController {
   async addReply(@Param('id') id: string, @Body() dto: PostReplyDto) {
     const reply: Reply = {
       author: dto.author,
+      authorEmail: dto.authorEmail,
       role: dto.role,
       text: dto.text,
       time: new Date().toLocaleString('en-IN', {

@@ -219,16 +219,24 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ onNaviga
               <Eye size={15} style={{ color: '#0a84ff' }} />
               <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>Top 10 FAQs by Views</span>
             </div>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={analytics.topFaqs.map((f) => ({ name: f.question.slice(0, 30) + '…', views: f.view_count }))}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="name" tick={{ fontSize: 9, fill: 'var(--text-muted)' }} interval={0} angle={-20} textAnchor="end" height={50} />
-                <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }} allowDecimals={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend />
-                <Bar dataKey="views" fill="#0a84ff" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <div style={{ maxWidth: '850px', width: '100%', margin: '0 auto' }}>
+              <ResponsiveContainer width="100%" height={320}>
+                <BarChart
+                  layout="vertical"
+                  data={analytics.topFaqs.map((f) => ({ 
+                    name: f.question.length > 50 ? f.question.slice(0, 47) + '...' : f.question, 
+                    views: f.view_count 
+                  }))}
+                  margin={{ left: 10, right: 20, top: 5, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
+                  <XAxis type="number" tick={{ fontSize: 10, fill: 'var(--text-muted)' }} allowDecimals={false} />
+                  <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: 'var(--text-primary)' }} width={350} />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Bar dataKey="views" fill="#0a84ff" radius={[0, 4, 4, 0]} barSize={14} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
       )}

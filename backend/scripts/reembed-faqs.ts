@@ -20,9 +20,11 @@ import { FAQSchema } from '../src/faqs/schemas/faq.schema';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const MONGO_URI = process.env.MONGO_URI ??
-  'mongodb+srv://admin:Admin2026@cluster0.xa4zt7h.mongodb.net/vicharanashala?appName=Cluster0';
+const MONGO_URI = process.env.MONGO_URI as string;
 
+if (!MONGO_URI) {
+  throw new Error('MONGO_URI environment variable is required');
+}
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 if (!GEMINI_API_KEY) {
   console.error('GEMINI_API_KEY env var is required');
