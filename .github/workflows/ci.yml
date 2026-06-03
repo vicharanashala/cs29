@@ -71,6 +71,7 @@ jobs:
         with:
           context: ./backend
           push: true
+          no-cache: true
           tags: ${{ secrets.DOCKER_USERNAME }}/vicharanashala-backend:latest
 
       - name: Build and push frontend image
@@ -78,6 +79,7 @@ jobs:
         with:
           context: ./frontend
           push: true
+          no-cache: true
           tags: ${{ secrets.DOCKER_USERNAME }}/vicharanashala-frontend:latest
           build-args: |
             VITE_API_URL=${{ vars.VITE_API_URL }}
