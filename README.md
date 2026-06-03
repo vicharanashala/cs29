@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # Vicharanashala FAQ Portal
 
-A crowd-sourced FAQ portal for the Vicharanashala Internship Programme (VINS) at IIT Ropar. Students can browse, search, and bookmark FAQs. An AI assistant (Yaksha-mini) answers questions not covered by the FAQ database and queues them for admin review.
+A crowd-sourced FAQ portal for the Vicharanashala Internship Programme (VINS) at IIT Ropar. Students can browse, search, and bookmark FAQs, raise and track issues, view leaderboards, and receive real-time notifications. An AI assistant (Yaksha) answers questions not covered in the FAQ database using a RAG pipeline and queues unresolved queries for admin review.
 
 ---
 
@@ -10,20 +9,55 @@ A crowd-sourced FAQ portal for the Vicharanashala Internship Programme (VINS) at
 | Layer | Technology |
 |---|---|
 | Frontend | React 19 + Vite + TypeScript + TanStack Router + TanStack Query |
-| Backend | NestJS + Mongoose |
-| Database | MongoDB Atlas (cloud) |
-| Auth | Firebase Authentication (Email/Password + Google Sign-in) |
+| Backend | NestJS + Mongoose ODM |
+| Database | MongoDB Atlas (cloud, replica set) |
+| Auth | Firebase Authentication (Email/Password + Google Sign-in) *(prototype bypass in place)* |
 | AI | Minimax (primary) → Gemini (fallback) with RAG pipeline |
+| Styling | Custom CSS (responsive, theme-aware) + GSAP animations + React Three Fiber 3D |
+| Charts | Recharts |
+
+---
+
+## Features
+
+### Public
+
+- **FAQ Browse & Search** — All 168+ FAQs with category filtering, keyword search, and bookmarking
+- **AI Chat (Yaksha)** — Floating chat widget with RAG-powered answers; falls back to text search when embedding generation fails; gracefully degrades when AI providers are unavailable
+- **Raise Issue** — Students can submit queries not covered by existing FAQs; receives AI-generated answer + similar FAQ hints before submission
+- **Track Issues** — Students can track the status of their raised issues (pending, resolved, published)
+- **Resolve Question** — Peer-assisted answering flow where students can submit answers to open issues; answers go to admin moderation before being published as official FAQs
+- **Leaderboard** — Ranked by SP (Samaga Points) with real-time updates
+- **Notifications** — Real-time notification bell with read/unread state and mark-all-read
+- **Announcements** — Admin broadcast messages visible to all users
+- **User Profile** — View SP balance, activity stats (questions asked, answers given)
+- **Register / Login** — Email+password and Google Sign-in
+
+### Admin Panel
+
+- **Analytics Dashboard** — Total FAQs, views, issue counts, weekly activity charts
+- **FAQ Management** — Create, edit, delete, and promote FAQs; view per-FAQ metrics
+- **Moderation: Pending Queries** — Approve/reject student-raised issues; publish approved issues as official FAQs
+- **Moderation: Pending Answers** — Approve/reject peer-submitted answers to open issues; approved answers go live as FAQ responses
+- **Announcements** — Create and broadcast system-wide announcements
+
+### Behind the Scenes
+
+- **RAG Pipeline** — Query embedding via Gemini → cosine similarity against FAQ vector store → top-K matched FAQs → LLM synthesises answer
+- **Multi-provider AI Fallback** — Primary: Minimax → Secondary: Gemini → Tertiary: text search fallback
+- **SP Reward System** — Students earn Samaga Points for raising resolved issues and answering questions that get published; SP awarded idempotently (once per action)
+- **Notification Broadcasting** — Admins can broadcast messages to all users
+- **Issue Threading** — Students and admins can reply within issue threads
 
 ---
 
 ## Prerequisites
 
 - **Node.js 20+** — [nodejs.org](https://nodejs.org)
-- **MongoDB Atlas account** — [mongodb.com/atlas](https://www.mongodb.com/atlas) (free tier is sufficient)
-- **Firebase project** — [console.firebase.google.com](https://console.firebase.google.com) (Email/Password + Google auth enabled)
-- **Minimax API key** — [minimax.io](https://www.minimax.io) (optional — Gemini fallback works without it)
-- **Gemini API key** — [aistudio.google.com](https://aistudio.google.com)
+- **MongoDB Atlas account** — [mongodb.com/atlas](https://www.mongodb.com/atlas) (free tier is sufficient, replica set required)
+- **Firebase project** — [console.firebase.google.com](https://console.firebase.google.com) (Email/Password + Google auth enabled) — **required for production auth**
+- **Gemini API key** — [aistudio.google.com](https://aistudio.google.com) (prepaid credits required)
+- **Minimax API key** — [minimax.io](https://minimax.io) (optional, Gemini fallback works without it)
 
 ---
 
@@ -32,8 +66,8 @@ A crowd-sourced FAQ portal for the Vicharanashala Internship Programme (VINS) at
 ### 1. Clone the repository
 
 ```bash
-git clone <repo-url>
-cd vicharanashala-faq-portal
+git clone https://github.com/vicharanashala/cs29.git
+cd cs29
 ```
 
 ### 2. Backend setup
@@ -48,8 +82,8 @@ Create `backend/.env`:
 ```env
 PORT=3001
 MONGO_URI=<your_mongodb_atlas_connection_string>
-MINIMAX_API_KEY=<your_minimax_api_key>
 GEMINI_API_KEY=<your_gemini_api_key>
+MINIMAX_API_KEY=<your_minimax_api_key>
 FIREBASE_PROJECT_ID=<your_firebase_project_id>
 FIREBASE_CLIENT_EMAIL=<your_firebase_admin_client_email>
 FIREBASE_PRIVATE_KEY="<your_firebase_admin_private_key>"
@@ -63,9 +97,7 @@ npm run start:dev
 
 The API will be available at `http://localhost:3001`.
 
-### 3. Seed the FAQ database
-
-Run this once to load the 100+ official VINS FAQs into MongoDB:
+### 3. Seed the FAQ database *(run once only)*
 
 ```bash
 npx ts-node -r tsconfig-paths/register seed.ts
@@ -75,20 +107,38 @@ Output: `FAQs seeded successfully!`
 
 > **Note:** This clears and re-inserts all FAQs. Only run again if you want to reset the data.
 
-### 4. Create the admin user
+### 4. Generate FAQ embeddings *(run once after seed)*
+
+Embeddings are required for the RAG similarity search:
+
+```bash
+npx ts-node -r tsconfig-paths/register scripts/generate-embeddings.ts
+```
+
+> This iterates over all FAQs, generates vector embeddings via Gemini, and stores them in the database. Only needed after a fresh seed.
+
+To re-embed all FAQs after key changes:
+
+```bash
+npx ts-node -r tsconfig-paths/register scripts/reembed-faqs.ts
+```
+
+### 5. Create the admin user
 
 ```bash
 npx ts-node -r tsconfig-paths/register src/scripts/create-admin.ts
 ```
 
-This creates (or resets) the default admin account in Firebase **and** MongoDB:
+Creates (or resets) the default admin account:
 
 | Field | Value |
 |---|---|
 | Email | `admin@vicharanashala.in` |
 | Password | `Admin@2026` |
 
-### 5. Frontend setup
+> **Note:** This also creates the Firebase user. Ensure Firebase Authentication is configured with Email/Password enabled before running.
+
+### 6. Frontend setup
 
 ```bash
 cd ../frontend
@@ -113,61 +163,32 @@ Start the frontend:
 npm run dev
 ```
 
-### 6. Open the app
+### 7. Open the app
 
 | URL | Description |
 |---|---|
-| `http://localhost:5173` | Public FAQ portal |
-| `http://localhost:5173/admin` | Admin panel (requires admin login) |
-| `http://localhost:5173/login` | Login page |
-| `http://localhost:5173/register` | Student registration |
-
-Log in to the admin panel with `admin@vicharanashala.in` / `Admin@2026`.
+| `http://localhost:3000` | Public FAQ portal (Vite dev server) |
+| `http://localhost:3000/admin` | Admin panel (requires admin login) |
+| `http://localhost:3000/login` | Login page |
+| `http://localhost:3000/register` | Student registration |
+| `http://localhost:3000/chat` | Full-page Yaksha chat |
+| `http://localhost:3000/leaderboard` | SP leaderboard |
+| `http://localhost:3000/raise-issue` | Raise a new issue |
+| `http://localhost:3000/track-issues` | Track your raised issues |
 
 ---
 
-## Project Structure
+## Database Schemas
 
-```
-.
-├── backend/
-│   ├── src/
-│   │   ├── admin/              # Admin panel endpoints
-│   │   ├── ai/                 # RAG pipeline (Minimax → Gemini fallback)
-│   │   ├── auth/               # Firebase auth guard + sync service
-│   │   ├── faqs/schemas/       # FAQ + PendingFaq schemas
-│   │   ├── scripts/
-│   │   │   └── create-admin.ts # Admin seed script (Firebase + MongoDB)
-│   │   ├── users/schemas/      # User schema
-│   │   ├── app.module.ts
-│   │   ├── chat.controller.ts  # POST /api/chat
-│   │   └── faq.controller.ts   # GET /api/faqs, PATCH /api/faqs/:id/view
-│   ├── Dockerfile
-│   └── seed.ts                 # FAQ seed script
-│
-├── frontend/
-│   ├── src/
-│   │   ├── api/                # Typed API client (axios + Firebase token interceptor)
-│   │   ├── components/
-│   │   │   ├── FaqDashboard.tsx
-│   │   │   └── YakshaChat.tsx
-│   │   ├── pages/
-│   │   │   ├── AdminPage.tsx
-│   │   │   ├── LoginPage.tsx
-│   │   │   └── RegisterPage.tsx
-│   │   ├── firebase.ts         # Firebase app initialisation
-│   │   ├── App.tsx             # Home route + onAuthStateChanged
-│   │   ├── router.tsx          # TanStack Router setup
-│   │   └── queryClient.ts      # TanStack Query config
-│   ├── Dockerfile
-│   └── nginx.conf              # nginx config (SPA fallback + /api proxy)
-│
-├── deploy/
-│   ├── deploy.sh               # EC2 deploy script
-│   └── docker-compose.prod.yml # Production compose (pre-built images)
-│
-└── docker-compose.yml          # Local Docker Compose (builds from source)
-```
+| Schema | Description |
+|---|---|
+| `User` | email, name, firstName, lastName, role (STUDENT/ADMIN), reward_points, answered_count, questions_asked |
+| `Faq` | question, answer, answer_hi, category, tags, view_count, embedding, createdAt, updatedAt |
+| `PendingFaq` | title, description, raisedBy, status (PENDING/APPROVED/REJECTED), spAwarded |
+| `Issue` | title, description, raisedBy, status (open/resolved/closed), resolution, replyCount, spAwarded, createdAt |
+| `IssueReply` | issueId, repliedBy, content, createdAt |
+| `Notification` | userEmail, title, message, type, isRead, createdAt |
+| `PendingApproval` | type (QUERY/ANSWER), issueId, content, submittedBy, authorEmail, status, spAwarded, createdAt |
 
 ---
 
@@ -177,39 +198,190 @@ Log in to the admin panel with `admin@vicharanashala.in` / `Admin@2026`.
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/api/auth/sync` | Firebase token | Upsert user in MongoDB after Firebase sign-in |
+| POST | `/api/auth/signup` | — | Register a new student account |
+| POST | `/api/auth/login` | — | Login (returns user object) |
+| GET | `/api/users/:email` | — | Get user profile |
+| PATCH | `/api/users/:email` | — | Update user profile |
+| POST | `/api/auth/sync` | Firebase token | Sync Firebase user to MongoDB *(prototype — not fully wired)* |
 
 ### FAQs
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| GET | `/api/faqs` | — | All FAQs |
-| GET | `/api/faqs/top` | — | Top 10 by view count |
-| GET | `/api/faqs/category/:category` | — | FAQs filtered by category |
-| PATCH | `/api/faqs/:id/view` | — | Increment view count |
-| POST | `/api/chat` | — | AI chat (RAG pipeline) |
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/faqs` | All published FAQs |
+| GET | `/api/faqs/top` | Top 5 FAQs by view count |
+| GET | `/api/faqs/analytics` | `{ totalFaqs, totalViews, topFaqs[], categoryBreakdown[] }` |
+| GET | `/api/faqs/categories` | All categories with FAQ counts |
+| POST | `/api/faqs` | *(admin)* Create a new FAQ |
+| PUT | `/api/faqs/:id` | *(admin)* Update a FAQ |
+| DELETE | `/api/faqs/:id` | *(admin)* Delete a FAQ |
+| PATCH | `/api/faqs/:id/view` | Increment view count (once per session) |
+| POST | `/api/faqs/:id/rate` | Rate a FAQ (helpful / not helpful) |
+| POST | `/api/faqs/similar` | Find similar FAQs by text query (RAG embedding → vector search → text search fallback) |
 
-### Admin (requires `ADMIN` role)
+### Chat / AI
 
 | Method | Endpoint | Description |
 |---|---|---|
-| GET | `/api/admin/pending` | All pending questions |
-| PATCH | `/api/admin/pending/:id/approve` | Approve → publish to FAQs |
-| PATCH | `/api/admin/pending/:id/reject` | Reject and remove |
+| POST | `/api/chat` | RAG chat — sends `{ question }`, returns `{ answer, matchedFaqs[] }` |
+
+### Issues
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/issues` | All issues (filter by `?status=` or `?raisedBy=`) |
+| GET | `/api/issues/:id` | Get single issue with replies |
+| POST | `/api/issues` | Raise a new issue |
+| PATCH | `/api/issues/:id/status` | Update issue status; award SP to asker and peer responder on first call (idempotent via `spAwarded` flag) |
+| POST | `/api/issues/:id/replies` | Add a reply to an issue |
+
+### Notifications
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/notifications/:email` | Get all notifications for a user |
+| PATCH | `/api/notifications/:id/read` | Mark one notification as read |
+| PATCH | `/api/notifications/read-all/:email` | Mark all notifications as read |
+| POST | `/api/notifications/broadcast` | *(admin)* Broadcast a notification to all users |
+
+### Rewards / Leaderboard
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/rewards/leaderboard` | Top 10 students by SP |
+| GET | `/api/rewards/my-points/:email` | Current user's SP balance and stats |
+| POST | `/api/rewards/answer/:email` | Award SP to a student for answering a question *(called by admin on approval)* |
+
+### Admin *(requires ADMIN role)*
+
+| Method | Endpoint | Description |
+|---|---|---|
 | GET | `/api/admin/stats` | `{ totalFaqs, pendingCount, resolvedToday }` |
+| GET | `/api/admin/pending` | All pending queries and answers for moderation |
+| PATCH | `/api/admin/pending/:id/approve` | Approve and publish pending item → creates FAQ + awards SP |
+| PATCH | `/api/admin/pending/:id/reject` | Reject pending item |
 | GET | `/api/admin/faqs` | All FAQs (admin view) |
-| POST | `/api/admin/faqs` | Create a new FAQ |
+| POST | `/api/admin/faqs` | Create a new FAQ directly |
 | DELETE | `/api/admin/faqs/:id` | Delete a FAQ |
 
 ---
 
-## CI
+## Project Structure
 
-GitHub Actions runs on every push and pull request to `main`:
+```
+cs29/
+├── backend/
+│   ├── src/
+│   │   ├── ai/
+│   │   │   └── ai.service.ts         # RAG pipeline: embedding, text search, LLM calls
+│   │   ├── auth/
+│   │   │   ├── auth.controller.ts    # Login/signup endpoints
+│   │   │   ├── auth.service.ts
+│   │   │   ├── firebase-auth.guard.ts
+│   │   │   └── firebase.service.ts
+│   │   ├── admin/
+│   │   │   ├── admin.controller.ts   # Admin-only endpoints
+│   │   │   ├── admin.service.ts
+│   │   │   └── admin.module.ts
+│   │   ├── faqs/
+│   │   │   └── schemas/              # FAQ + PendingFaq Mongoose schemas
+│   │   ├── users/
+│   │   │   └── schemas/              # User schema
+│   │   ├── pending-approvals/
+│   │   │   └── schemas/              # PendingApproval schema (QUERY + ANSWER types)
+│   │   ├── notifications/
+│   │   │   └── schemas/              # Notification schema
+│   │   ├── faq.controller.ts         # FAQ CRUD + analytics + /chat + /similar
+│   │   ├── issue.controller.ts       # Issue CRUD + replies + SP reward logic
+│   │   ├── chat.controller.ts        # POST /api/chat (RAG answer)
+│   │   ├── notifications.controller.ts
+│   │   ├── rewards.controller.ts     # Leaderboard + SP management
+│   │   └── main.ts
+│   ├── scripts/
+│   │   └── create-admin.ts           # Admin seed script
+│   ├── seed.ts                       # FAQ seed script (127 FAQs from Samagama)
+│   ├── migrate-embeddings.ts         # Migration: add embeddings to existing FAQs
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── src/
+│   │   ├── api/                      # Axios client with auth interceptors
+│   │   ├── components/
+│   │   │   ├── FaqDashboard.tsx      # Main FAQ list with search + category filter
+│   │   │   ├── YakshaChat.tsx        # Floating chat widget
+│   │   │   ├── Leaderboard.tsx       # SP leaderboard display
+│   │   │   ├── SimilarFaqsHint.tsx   # Similar FAQ hints while raising issues
+│   │   │   ├── NotificationPanel.tsx # Notification bell + panel
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── Layout.tsx
+│   │   │   ├── admin/
+│   │   │   │   ├── AdminLayout.tsx
+│   │   │   │   ├── dashboard/
+│   │   │   │   │   ├── AnalyticsDashboard.tsx  # Admin charts + stats
+│   │   │   │   │   └── TopFAQsList.tsx
+│   │   │   │   ├── faq/
+│   │   │   │   │   ├── FAQManagement.tsx       # Admin FAQ list
+│   │   │   │   │   └── FAQPromoterCard.tsx
+│   │   │   │   ├── moderation/
+│   │   │   │   │   ├── QueryModerator.tsx      # Pending query review
+│   │   │   │   │   ├── AnswerReviewList.tsx    # Pending answer review
+│   │   │   │   │   ├── QueryApprovalCard.tsx
+│   │   │   │   │   └── AnswerApprovalCard.tsx
+│   │   │   │   └── announcements/
+│   │   │   │       └── AnnouncementForm.tsx
+│   │   │   ├── auth/
+│   │   │   │   ├── GoogleAuthModal.tsx
+│   │   │   │   └── OtpVerification.tsx
+│   │   │   └── three/
+│   │   │       └── CoreScene.tsx     # React Three Fiber 3D hero (optional)
+│   │   ├── pages/
+│   │   │   ├── LandingPage.tsx       # Public landing page
+│   │   │   ├── Dashboard.tsx         # Authenticated home
+│   │   │   ├── FaqPage.tsx           # FAQ detail view
+│   │   │   ├── ChatPage.tsx          # Full-page Yaksha chat
+│   │   │   ├── LeaderboardPage.tsx
+│   │   │   ├── RaiseIssuePage.tsx    # Submit a new issue
+│   │   │   ├── ResolveQuestionPage.tsx  # Peer answer submission
+│   │   │   ├── TrackIssuesPage.tsx   # Track raised issues
+│   │   │   ├── AnnouncementsPage.tsx
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── RegisterPage.tsx
+│   │   │   ├── ForgotPasswordPage.tsx
+│   │   │   ├── ProfilePage.tsx       # User SP stats + profile
+│   │   │   ├── AdminPage.tsx         # Admin layout wrapper
+│   │   │   └── AdminDashboard.tsx    # Admin home
+│   │   ├── context/
+│   │   │   ├── AuthContext.tsx       # Auth state + login/logout
+│   │   │   ├── LanguageContext.tsx   # English / Hindi toggle
+│   │   │   └── ThemeContext.tsx      # Light / dark mode
+│   │   ├── translations/
+│   │   │   ├── en.ts                 # English FAQ content
+│   │   │   └── hi.ts                 # Hindi FAQ content
+│   │   ├── router.tsx                # TanStack Router setup
+│   │   ├── firebase.ts               # Firebase initialisation
+│   │   └── App.tsx
+│   ├── Dockerfile
+│   └── nginx.conf                    # SPA fallback + /api proxy to :3001
+│
+├── deploy/
+│   ├── deploy.sh                     # EC2 pull + restart script
+│   └── docker-compose.prod.yml       # Production compose (pre-built images)
+│
+└── docker-compose.yml                # Local Docker Compose (builds from source)
+```
 
-- **`backend-test`** — `npm ci` → `nest build` → `jest`
-- **`frontend-build`** — `npm ci` → `tsc -b && vite build`
-- **`build-and-push`** — builds Docker images and pushes to Docker Hub (push to `main` only)
+---
+
+## CI / CD
+
+GitHub Actions runs on every push to `main`:
+
+| Job | What it does |
+|---|---|
+| `backend-test` | `npm ci` → `nest build` → `jest` (unit tests) |
+| `frontend-build` | `npm ci` → `tsc -b && vite build` |
+| `build-and-push` | Builds Docker images and pushes to Docker Hub |
 
 See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
@@ -219,72 +391,27 @@ See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ### Prerequisites
 
-- **AWS account** with an EC2 instance (t2.micro free tier is sufficient)
+- **AWS EC2 instance** (t2.micro free tier is sufficient)
 - **Docker Hub account** for storing the built images
 - **Docker** and **Docker Compose** installed on the EC2 instance
 
 ### GitHub Actions secrets / variables
 
-Set these in your repository **Settings → Secrets and variables → Actions**:
+Set in **Settings → Secrets and variables → Actions**:
 
 | Name | Type | Value |
 |---|---|---|
 | `DOCKER_USERNAME` | Secret | Your Docker Hub username |
-| `DOCKER_PASSWORD` | Secret | Your Docker Hub password or access token |
+| `DOCKER_PASSWORD` | Secret | Docker Hub password or access token |
 | `VITE_FIREBASE_API_KEY` | Secret | Firebase web API key |
-| `VITE_API_URL` | Variable | Your EC2 public URL e.g. `http://<ec2-ip>:3001` |
+| `VITE_API_URL` | Variable | `http://<ec2-ip>:3001` |
 | `VITE_FIREBASE_AUTH_DOMAIN` | Variable | `<project_id>.firebaseapp.com` |
 | `VITE_FIREBASE_PROJECT_ID` | Variable | Firebase project ID |
 | `VITE_FIREBASE_STORAGE_BUCKET` | Variable | `<project_id>.firebasestorage.app` |
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | Variable | Firebase messaging sender ID |
 | `VITE_FIREBASE_APP_ID` | Variable | Firebase app ID |
 
-Every push to `main` will automatically build and push the Docker images.
-
-### EC2 instance setup
-
-SSH into your EC2 instance and run:
-
-```bash
-# Install Docker
-sudo apt-get update
-sudo apt-get install -y ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
-
-# Allow running Docker without sudo
-sudo usermod -aG docker ubuntu
-newgrp docker
-```
-
-### Environment variables on EC2
-
-Create `/home/ubuntu/backend.env` on the EC2 instance:
-
-```env
-PORT=3001
-MONGO_URI=<your_mongodb_atlas_connection_string>
-MINIMAX_API_KEY=<your_minimax_api_key>
-GEMINI_API_KEY=<your_gemini_api_key>
-FIREBASE_PROJECT_ID=<your_firebase_project_id>
-FIREBASE_CLIENT_EMAIL=<your_firebase_admin_client_email>
-FIREBASE_PRIVATE_KEY="<your_firebase_admin_private_key>"
-```
-
-Copy the production compose file to the instance:
-
-```bash
-scp deploy/docker-compose.prod.yml ubuntu@<ec2-ip>:/home/ubuntu/docker-compose.prod.yml
-scp deploy/deploy.sh ubuntu@<ec2-ip>:/home/ubuntu/deploy.sh
-chmod +x /home/ubuntu/deploy.sh
-```
-
-### Deploy
+Every push to `main` automatically builds and pushes Docker images. Then on the EC2:
 
 ```bash
 ssh ubuntu@<ec2-ip>
@@ -292,102 +419,48 @@ export DOCKER_USERNAME=yourdockerhubusername
 bash /home/ubuntu/deploy.sh
 ```
 
-The script pulls the latest images from Docker Hub and restarts the containers with `restart: always`.
-
 ### EC2 Security Group — required inbound rules
 
 | Port | Protocol | Source | Purpose |
 |---|---|---|---|
 | 22 | TCP | Your IP | SSH access |
 | 80 | TCP | 0.0.0.0/0 | Frontend (HTTP) |
-| 443 | TCP | 0.0.0.0/0 | HTTPS (if you add TLS) |
-| 3001 | TCP | 0.0.0.0/0 | Backend API (direct access) |
-
-### Local Docker test
-
-Before deploying, verify both images build correctly on your local machine:
-
-```bash
-docker-compose build
-```
-
-Then start the full stack locally:
-
-```bash
-docker-compose up
-```
-
-Open `http://localhost` — the frontend is served by nginx on port 80, with `/api/*` proxied to the backend on port 3001.
-=======
-# Vicharanashala FAQ Portal Prototype 🚀
-
-Welcome to the FAQ Portal! If you are new to this project, don't worry. This guide is written so that anyone can understand it, even if you are just starting out with coding.
-
-Think of this app like a restaurant:
-* **The Database (MongoDB):** This is the pantry where we store all our food (the FAQ questions).
-* **The Backend (NestJS):** This is the waiter and kitchen. It takes requests from the customers and fetches the right food from the pantry.
-* **The Frontend (React):** This is the beautiful dining room where the customer sits, reads the menu (the FAQs), and talks to the staff.
+| 443 | TCP | 0.0.0.0/0 | HTTPS (optional) |
+| 3001 | TCP | 0.0.0.0/0 | Backend API |
 
 ---
 
-## 🌟 What We Have Built So Far (Phase 1)
+## Future Work
 
-1.  **The Brain is Filled (Database Seeding):** We created a script that automatically takes 127 official Samagama FAQs and neatly organizes them into our MongoDB database. 
-2.  **The Waiter is Ready (NestJS Backend):** We built a backend server that safely connects to the database. It has a special "route" (like a door) that allows the frontend to ask for the FAQ questions.
-3.  **The Dining Room is Open (React Frontend):** We built a beautiful website where users can view all the questions. It has a working search bar and category buttons that filter the questions instantly!
+The following features are planned or partially implemented:
 
----
-
-## 🛠️ How to Run the App on Your Computer
-
-Follow these steps exactly to see the app working on your screen. You will need to open **three different terminal windows**.
-
-### Step 1: Wake Up the Database
-Our app needs a place to store data. If you are using a local database on a Mac, open your terminal and type:
-`brew services start mongodb-community`
-*(If your team is using a cloud database like MongoDB Atlas, you can skip this step!)*
-
-### Step 2: Feed the Database (Only do this ONCE!)
-We need to put the 127 questions into the database. 
-1. Open a terminal and go into the `backend` folder.
-2. Type: `npm install` (to download the tools we need).
-3. Type: `MONGO_URI="mongodb://localhost:27017/vicharanashala" npx ts-node seed.ts`
-*(When it says "FAQs seeded successfully!", you are done. Never run this again unless you want to erase everything and start over).*
-
-### Step 3: Start the Backend (The Waiter)
-Keep the database running in the background. Now let's turn on the backend.
-1. Open a **new** terminal window and go into the `backend` folder.
-2. Type: `npm run start:dev`
-*(Wait until it says the Nest application successfully started. It is now running on port 3000).*
-
-### Step 4: Start the Frontend (The Dining Room)
-Now let's turn on the beautiful website.
-1. Open a **third** terminal window and go into the `frontend` folder.
-2. Type: `npm install` (to download the tools for the website).
-3. Type: `npm run dev`
-4. It will give you a link (usually `http://localhost:5173/`). Click it or type it into your browser!
+| Feature | Status | Notes |
+|---|---|---|
+| Real Firebase Auth (Google Sign-in) | ⚠️ Partial | UI wired; Firebase config is placeholder. Backend `FirebaseAuthGuard` uses prototype bypass. |
+| Real SMS OTP | ⚠️ Partial | Frontend has OTP step; accepts hardcoded `123456`. Backend has no OTP generation/verification. |
+| Production session management | ⚠️ Partial | Uses `localStorage` for user state. No HTTP-only cookies or JWT refresh. |
+| Light & Dark mode toggle | ✅ Done | `ThemeContext.tsx` — theme switcher in Header |
+| Announcements system | ✅ Done | Admin broadcast + user notification panel |
+| SP Badge system | 🔜 Next | Leaderboard + SP rewards already in place; visual badges not yet displayed |
+| Email notifications | 🔜 Next | Currently notifications are in-app only |
+| "Liquid Glass" UI | 🔜 Next | CSS `backdrop-filter: blur` styling upgrade |
+| Password reset email | 🔜 Next | `ForgotPasswordPage.tsx` exists; backend endpoint needs implementing |
 
 ---
 
-## 🔮 Future Work (What we are building next)
+## FAQ Database
 
-We have some amazing features planned. If you want to help, here is what we are building and where the code will go:
+The portal ships with **168 official VINS/Samagama FAQs** across **24 categories**:
 
-### 1. The Yaksha-mini AI Chatbot (Phase 2)
-* **What it is:** A floating chat window where users can ask questions. If the answer isn't in the FAQs, an AI will answer it! We have a super-smart system that tries the Minimax AI first, and if that fails, it instantly switches to Gemini AI so it never breaks.
-* **Where it belongs:** * Frontend: `frontend/src/YakshaChat.tsx` (to connect the "Send" button to the real API).
-    * Backend: `backend/src/ai.service.ts` (this file is already built, we just need to link it to a controller!).
+About the Internship, Badges, Certificate, Certificates, Co-curricular, Curriculum, Environment Setup, Experience, Financials, Fortnightly Reviews, Holidays, How to Apply, Infrastructure, Miscellaneous, NOC, Placements, Post-VINS, Projects, Rules, Security, Submission, Technical, Time Commitment, Work
 
-### 2. Admin Maker-Checker Panel
-* **What it is:** A secret page for team members. When students suggest new answers, they go into a "Pending" queue. An admin must read them and click "Approve" before the public can see them.
-* **Where it belongs:** * Backend: `backend/src/pending-approvals.schema.ts` (the database rules for pending items).
-    * Frontend: A new file we will create called `frontend/src/AdminPanel.tsx`.
+Seed script: `backend/seed.ts` (run once, 127 FAQs from Samagama + some VINS-specific additions)
 
-### 3. Light & Dark Mode Toggle
-* **What it is:** A simple switch at the top of the screen so users can change the website from dark mode (night) to light mode (day).
-* **Where it belongs:** * Frontend: `frontend/src/style.css` (we will add light mode colors) and a new toggle button in `frontend/src/FaqDashboard.tsx`.
+---
 
-### 4. "Liquid Glass" UI Design
-* **What it is:** Upgrading the look of our buttons and chat widget so they look slightly see-through and shiny, exactly like the premium glass icons you see on Apple devices or Telegram.
-* **Where it belongs:** * Frontend: `frontend/src/style.css`. We will use CSS properties like `backdrop-filter: blur(10px)` to make things look like frosted glass!
->>>>>>> upstream/main
+## Known Limitations
+
+- **Firebase Auth** is prototype-only. The app uses a hardcoded admin bypass in `FirebaseAuthGuard` and placeholder Firebase credentials. Real Firebase setup is required for production.
+- **OTP verification** accepts `123456` regardless of input. Real SMS delivery requires a Twilio or AWS SNS account.
+- **Session management** uses `localStorage`. For production, HTTP-only secure cookies with JWT refresh should replace this.
+- **Gemini API key** must have prepaid credits. When credits are exhausted, Yaksha chat falls back to text search only.
