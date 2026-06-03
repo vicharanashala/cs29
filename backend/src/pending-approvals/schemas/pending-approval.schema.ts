@@ -56,6 +56,10 @@ export class PendingApproval {
   @Prop({ type: String, default: '' })
   resolution: string;
 
+  // Guard against double-awarding SP on repeated publish calls
+  @Prop({ type: Boolean, default: false })
+  spAwarded: boolean;
+
   // Fallback fields for AI-generated drafts (from RAG)
   @Prop({ required: false, type: String })
   question?: string;

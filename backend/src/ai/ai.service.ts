@@ -232,9 +232,19 @@ export class AiService implements OnModuleInit {
           },
         },
       ]);
-    } catch {
-      return [];
+    } catch (vectorErr) {
+      this.logger.warn(
+        'findSimilarFaqs: vector search failed, falling back to text search. Reason: ' +
+          (vectorErr instanceof Error ? vectorErr.message : String(vectorErr)),
+      );
+      // Fall through to text search below
     }
+
+    // Text-search fallback — runs when embedding succeeded but vector search failed,
+    // or when embedding failed entirely (caught above and queryEmbedding may be empty)
+    return this.textSearchFaqs(query).then((results) =>
+      results.map((r) => ({ ...r, score: 1 })),
+    );
   }
 
   // ─── Public: Main RAG Answer (used by /api/chat) ──────────────────────────────

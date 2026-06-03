@@ -189,7 +189,7 @@ export class UserController {
     if (dto.gpa !== undefined) (fields as any).gpa = dto.gpa;
 
     const updated = await this.userModel
-      .findOneAndUpdate({ email }, { $set: fields }, { new: true })
+      .findOneAndUpdate({ email }, { $set: fields }, { returnDocument: 'after' })
       .exec();
 
     return updated

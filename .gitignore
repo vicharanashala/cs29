@@ -17,3 +17,7 @@ backend/.DS_Store
 
 # Backend environment (contains real credentials)
 backend/.env
+
+# Backend log files
+*.log
+backend-fresh.log

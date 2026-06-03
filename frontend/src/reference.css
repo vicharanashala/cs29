@@ -3338,10 +3338,42 @@ mark.highlight,
 }
 
 /* Layout Overrides for sub-pages */
+/* Layout Overrides for sub-pages (Most Asked, Latest, Bookmarked) */
 .main-layout.full-width-layout {
   display: block;
-  max-width: var(--content-max);
+  max-width: 1200px;
+  width: 100%;
   margin: 32px auto 0;
+  padding: 0 var(--page-padding);
+  box-sizing: border-box;
+}
+
+/* Ensure full-width children expand to fill available space */
+.main-layout.full-width-layout .faq-main,
+.main-layout.full-width-layout .faq-flat-list {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Ensure FAQ items fill card width in flat list views */
+.main-layout.full-width-layout .faq-flat-list .faq-item {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Also ensure the same for category view items */
+.main-layout.full-width-layout .faq-main .faq-section .section-questions .faq-item {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.faq-flat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+  width: 100%;
 }
 
 /* Premium Skeleton Loading Screen Animation */

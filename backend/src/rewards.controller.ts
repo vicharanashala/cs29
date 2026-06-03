@@ -28,12 +28,13 @@ export class RewardsController {
       .find({ role: UserRole.STUDENT })
       .sort({ reward_points: -1 })
       .limit(10)
-      .select('name email reward_points answered_count questions_asked')
+      .select('name email firstName lastName reward_points answered_count questions_asked')
       .lean();
 
     return users.map((u, idx) => ({
       rank: idx + 1,
-      name: u.name,
+      // Derive a readable display name: prefer firstName+lastName, fall back to name, then email prefix
+      name: this.deriveDisplayName(u.name, (u as any).firstName, (u as any).lastName, u.email),
       email: u.email,
       reward_points: u.reward_points ?? 0,
       answered_count: u.answered_count ?? 0,
@@ -46,7 +47,7 @@ export class RewardsController {
   async getMyPoints(@Param('email') email: string) {
     const user = await this.userModel
       .findOne({ email })
-      .select('name email reward_points answered_count questions_asked')
+      .select('name email firstName lastName reward_points answered_count questions_asked')
       .lean();
 
     if (!user) return { found: false };
@@ -59,12 +60,26 @@ export class RewardsController {
 
     return {
       found: true,
-      name: user.name,
+      name: this.deriveDisplayName(user.name, (user as any).firstName, (user as any).lastName, user.email),
       email: user.email,
       reward_points: user.reward_points ?? 0,
       answered_count: user.answered_count ?? 0,
       questions_asked: user.questions_asked ?? 0,
       rank: rank + 1,
     };
+  }
+
+  /** Derive a human-readable display name from available user fields */
+  private deriveDisplayName(
+    name: string | undefined,
+    firstName: string | undefined,
+    lastName: string | undefined,
+    email: string,
+  ): string {
+    const first = (firstName || '').trim();
+    const last = (lastName || '').trim();
+    if (first || last) return [first, last].filter(Boolean).join(' ');
+    if (name && name.trim()) return name.trim();
+    return email.split('@')[0]; // fallback to email prefix
   }
 }

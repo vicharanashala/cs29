@@ -163,31 +163,56 @@ export class IssueController {
       review: ApprovalStatus.PENDING,
       resolved: ApprovalStatus.APPROVED,
     };
-    const update: Record<string, unknown> = {
+
+    // Atomic update: resolve status + mark spAwarded in ONE call.
+    // The $set: { spAwarded: true } always runs, but if spAwarded was already
+    // true the document won't match the filter — so we use a subdocument update
+    // to track whether we actually performed the SP-awarding pass.
+    const filter = { issueId: id };
+    const updateBase: Record<string, unknown> = {
       status: statusMap[body.status] ?? ApprovalStatus.PENDING,
     };
     if (body.resolution) {
-      (update as any).resolution = body.resolution;
+      (updateBase as any).resolution = body.resolution;
     }
-    const doc = await this.issueModel
-      .findOneAndUpdate({ issueId: id }, update, { new: true })
-      .exec();
-    if (!doc) return null;
-    // Award SP to asker
-    if (body.awardPoints && body.awardPoints > 0 && doc.raisedBy) {
-    await this.userModel.updateOne(
-    { email: doc.raisedBy },
-    { $inc: { reward_points: body.awardPoints } }
-  );
-}
 
-// Award SP to peer responder
-    if (body.peerEmail && body.peerPoints && body.peerPoints > 0) {
-    await this.userModel.updateOne(
-    { email: body.peerEmail },
-    { $inc: { reward_points: body.peerPoints, answered_count: 1 } }
-  );
-}
+    // Find doc BEFORE any spAwarded update so we know original state
+    const doc = await this.issueModel.findOne({ issueId: id }).exec();
+    if (!doc) return null;
+
+    // Now apply status change (always)
+    await this.issueModel.updateOne({ issueId: id }, { $set: updateBase }).exec();
+
+    // Award SP only on first call where SP > 0 (idempotency guard).
+    // spAwarded is ONLY set when we actually awarded SP — not on the
+    // resolve-only call (awardPoints=0). This allows the 2-step flow:
+    //   Step 1: resolve (awardPoints=0) → spAwarded stays false
+    //   Step 2: publish FAQ (awardPoints=10) → SP awarded, spAwarded=true
+    const spWasAwarded =
+      (body.awardPoints != null && body.awardPoints > 0 && !!doc.raisedBy) ||
+      (!!body.peerEmail && body.peerPoints != null && body.peerPoints > 0);
+
+    if (doc.spAwarded !== true && spWasAwarded) {
+      if (body.awardPoints && body.awardPoints > 0 && doc.raisedBy) {
+        await this.userModel.updateOne(
+          { email: doc.raisedBy },
+          { $inc: { reward_points: body.awardPoints } },
+          { upsert: true },
+        );
+      }
+      if (body.peerEmail && body.peerPoints && body.peerPoints > 0) {
+        await this.userModel.updateOne(
+          { email: body.peerEmail },
+          { $inc: { reward_points: body.peerPoints, answered_count: 1 } },
+          { upsert: true },
+        );
+      }
+      // Mark SP as awarded in DB — only set when we actually awarded
+      await this.issueModel.updateOne(
+        { issueId: id },
+        { $set: { spAwarded: true } }
+      );
+    }
 
     // Notify issue owner when resolved
     if (body.status === 'resolved' && doc.raisedBy) {
