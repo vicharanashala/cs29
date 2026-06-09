@@ -8,6 +8,18 @@ Built as part of the Vicharanashala Internship Programme (VINS) at IIT Ropar by 
 
 ---
 
+## 📁 Documentation (`docs/`)
+
+Three reference documents live in the [`docs/`](docs/) folder:
+
+| Document | What it covers |
+|---|---|
+| [`PRODUCT.md`](docs/PRODUCT.md) | **Every single file in the codebase explained** — what each file owns, why it exists, and how it fits into the architecture. Start here if you're reading the code for the first time. |
+| [`Project_Completion_Document.md`](docs/Project_Completion_Document.md) | **Full team report** — features implemented, architecture breakdown, individual contribution details per team member, and the contribution matrix. Written as the Week 4 programme deliverable. |
+| [`README_original.md`](docs/README_original.md) | **The original README** preserved for reference — the quick-start version written at the start of the project before the feature set was fully built out. |
+
+---
+
 ## What is the Vicharanashala FAQ Portal?
 
 Students joining the VINS programme face hundreds of recurring questions — about certificates, NOCs, timelines, submission deadlines, and more. Instead of answers living in a scattered mix of Samagama threads, WhatsApp groups, and word-of-mouth, this platform centralises everything:
@@ -744,10 +756,11 @@ All 168 FAQs are pre-embedded (3072-dim Gemini vectors) and stored in MongoDB, s
 
 ## Documentation
 
-The `docs/` folder contains:
+The [`docs/`](docs/) folder contains three reference documents:
 
-- [`docs/README_original.md`](docs/README_original.md) — the original quick-start README
-- [`docs/Project_Completion_Document.md`](docs/Project_Completion_Document.md) — the full team completion report with architecture diagrams and contribution breakdown
+- [`docs/PRODUCT.md`](docs/PRODUCT.md) — every file in the codebase explained with a short description (what it does and why it exists)
+- [`docs/Project_Completion_Document.md`](docs/Project_Completion_Document.md) — the full team completion report: features, architecture, and individual contribution breakdown
+- [`docs/README_original.md`](docs/README_original.md) — the original quick-start README preserved for reference
 
 ---
 
