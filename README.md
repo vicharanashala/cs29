@@ -14,6 +14,7 @@ Three reference documents live in the [`docs/`](docs/) folder:
 
 | Document | What it covers |
 |---|---|
+| [`Project_Report.md`](docs/Project_Report.md) | **Full project report** — title page, executive summary, system architecture diagrams, tech stack justification, feature breakdown, challenges, and future enhancements. The formal submission document for the VINS programme. |
 | [`PRODUCT.md`](docs/PRODUCT.md) | **Every single file in the codebase explained** — what each file owns, why it exists, and how it fits into the architecture. Start here if you're reading the code for the first time. |
 | [`Project_Completion_Document.md`](docs/Project_Completion_Document.md) | **Full team report** — features implemented, architecture breakdown, individual contribution details per team member, and the contribution matrix. Written as the Week 4 programme deliverable. |
 | [`README_original.md`](docs/README_original.md) | **The original README** preserved for reference — the quick-start version written at the start of the project before the feature set was fully built out. |
@@ -564,7 +565,12 @@ cs29/
 │                                       # triggered on every push or PR to main
 │
 ├── docs/
+│   ├── diagrams/                       # Rendered PNG exports of all architecture diagrams
+│   │   ├── system-architecture.png     # System component architecture (client, server, DB, AI)
+│   │   ├── rag-pipeline.png            # Yaksha Mini RAG pipeline flowchart
+│   │   └── moderation-workflow.png     # Maker-checker crowdsourced FAQ workflow
 │   ├── README_original.md              # The original README (preserved)
+│   ├── Project_Report.md               # Full formal project report (VINS submission)
 │   └── Project_Completion_Document.md  # Full team report: features, contributions, architecture
 │
 ├── docker-compose.yml                  # Local development Compose: builds both services
@@ -756,8 +762,9 @@ All 168 FAQs are pre-embedded (3072-dim Gemini vectors) and stored in MongoDB, s
 
 ## Documentation
 
-The [`docs/`](docs/) folder contains three reference documents:
+The [`docs/`](docs/) folder contains four reference documents:
 
+- [`docs/Project_Report.md`](docs/Project_Report.md) — the formal project report: title page, executive summary, system architecture diagrams, tech stack justification, feature breakdown, challenges, and future enhancements
 - [`docs/PRODUCT.md`](docs/PRODUCT.md) — every file in the codebase explained with a short description (what it does and why it exists)
 - [`docs/Project_Completion_Document.md`](docs/Project_Completion_Document.md) — the full team completion report: features, architecture, and individual contribution breakdown
 - [`docs/README_original.md`](docs/README_original.md) — the original quick-start README preserved for reference
